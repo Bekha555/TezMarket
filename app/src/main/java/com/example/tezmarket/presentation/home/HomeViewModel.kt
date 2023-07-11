@@ -13,6 +13,7 @@ import androidx.paging.cachedIn
 import com.example.tezmarket.data.remote.model.advertisements.Advertisements
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
+import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.Data
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
 import com.example.tezmarket.data.remote.model.products.ProductsData
@@ -48,6 +49,8 @@ class HomeViewModel @Inject constructor(
     var advertisementsUiState by mutableStateOf(UiState<Advertisements>())
         private set
 
+    var filteredProductsUiState by mutableStateOf(UiState<FilteredProducts>())
+        private set
 
     fun getHomeData() {
         getAllBanners()
@@ -193,6 +196,30 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             productRepositoryImpl.getAllAdvertisements().collect { result ->
                 advertisementsUiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFilteredProducts(filteredData: Map<String, Any>){
+        viewModelScope.launch {
+            productRepositoryImpl.getFilteredProducts(filteredData).collect{ result ->
+                filteredProductsUiState = when (result) {
                     is Resource.Success -> {
                         UiState(data = result.content)
                     }

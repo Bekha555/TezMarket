@@ -14,6 +14,7 @@ import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoriteProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoritesToggle
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
+import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.modcart.ModCartProduct
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.ProductByCategory
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
@@ -158,11 +159,17 @@ interface TezMarketApi {
     suspend fun getFilterData(): Response<FilterData>
 
     @GET("profile/user")
-    suspend fun getUser() : Response<UserData>
+    suspend fun getUser(): Response<UserData>
+    @JvmSuppressWildcards
+    @GET("products")
+    suspend fun getFilteredProducts(
+        @QueryMap filterData: Map<String, Any>
+    ): Response<FilteredProducts>
 
 
     companion object Constants {
-        const val AuthorizationToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5MjkzODc5NDQ0NCIsImV4cCI6MTY4ODAzMDg1Nn0.k5dK8B9Lub7VGz3Ky8O_p2SJTQZYOGWBan4n6-1xoTM"
+        const val AuthorizationToken =
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5MjkzODc5NDQ0NCIsImV4cCI6MTY4ODAzMDg1Nn0.k5dK8B9Lub7VGz3Ky8O_p2SJTQZYOGWBan4n6-1xoTM"
     }
 
 }

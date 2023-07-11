@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.example.tezmarket.data.remote.model.products.Data
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.common.Filters
@@ -61,6 +64,7 @@ fun ShowAllScreen(
     var search = remember {
         mutableStateOf(TextFieldValue(""))
     }
+    val state = rememberLazyGridState()
 
     LaunchedEffect(key1 = true, block = {
         if (productName != -1 && productName != -2 && productName != -3 && productName != 0) {
@@ -72,6 +76,8 @@ fun ShowAllScreen(
     val discProducts = homeViewModel.discProductItems.collectAsLazyPagingItems()
     val products = homeViewModel.productItems.collectAsLazyPagingItems()
     val shopsItems = homeViewModel.shopsItems.collectAsLazyPagingItems()
+    val filteredProducts = homeViewModel.filteredProductsUiState.data?.data ?: emptyList()
+
 
     Scaffold(
         topBar = {
@@ -84,7 +90,10 @@ fun ShowAllScreen(
                 title = "",
                 lazyListState = LazyListState(),
                 searchText = search,
-                onValueChange = {}
+                onValueChange = {
+                    search.value = it
+                    homeViewModel.getFilteredProducts(mapOf("title" to it.text))
+                }
             )
         },
         backgroundColor = Background
@@ -96,83 +105,106 @@ fun ShowAllScreen(
             Filters(onClick = { }, grid = { visible = !visible }, filter = {})
             AnimatedVisibility(visible = visible) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    when (productName) {
-                        -1 -> {
-                            gridItems(
-                                products.itemCount,
-                                nColumns = 2,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                products[it].let {
-                                    SaleProduct(
-                                        sale_label = "",
-                                        width = 170.dp,
-                                        onClick = { /*TODO*/ },
-                                        product = it
-                                    )
-                                }
+                    if (search.value.text.isNotEmpty()) {
+                        gridItems(
+                            filteredProducts.size,
+                            nColumns = 2,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            filteredProducts[it].let {
+                                SaleProduct(
+                                    sale_label = "",
+                                    width = 170.dp,
+                                    onClick = { /*TODO*/ },
+                                    product = it
+                                )
                             }
                         }
-
-                        -2 -> {
-                            gridItems(
-                                discProducts.itemCount,
-                                nColumns = 2,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                discProducts[it].let {
-                                    SaleProduct(
-                                        sale_label = "",
-                                        width = 170.dp,
-                                        onClick = { navController.navigate(
-                                            Screen.ProductDetailsScreen.passProductDetails(
-                                                it!!.id ?: 1
-                                            )
-                                        )},
-                                        product = it
-                                    )
+                    } else {
+                        when (productName) {
+                            -1 -> {
+                                gridItems(
+                                    products.itemCount,
+                                    nColumns = 2,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    products[it].let {
+                                        SaleProduct(
+                                            sale_label = "",
+                                            width = 170.dp,
+                                            onClick = { /*TODO*/ },
+                                            product = it
+                                        )
+                                    }
                                 }
                             }
-                        }
 
-                        -3 -> {
-                            gridItems(
-                                shopsItems.itemCount,
-                                nColumns = 2,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                shopsItems[it].let {
-                                    SaleProduct(
-                                        sale_label = "",
-                                        width = 170.dp,
-                                        onClick = { navController.navigate(
-                                            Screen.ProductDetailsScreen.passProductDetails(
-                                                it!!.id ?: 1
-                                            )
-                                        ) },
-                                        product = it
-                                    )
+                            -2 -> {
+                                gridItems(
+                                    discProducts.itemCount,
+                                    nColumns = 2,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    discProducts[it].let {
+                                        SaleProduct(
+                                            sale_label = "",
+                                            width = 170.dp,
+                                            onClick = {
+                                                navController.navigate(
+                                                    Screen.ProductDetailsScreen.passProductDetails(
+                                                        it!!.id ?: 1
+                                                    )
+                                                )
+                                            },
+                                            product = it
+                                        )
+                                    }
                                 }
                             }
-                        }
 
-                        else -> {
-                            gridItems(
-                                productsByCategory.itemCount,
-                                nColumns = 2,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                productsByCategory[it].let {
-                                    SaleProduct(
-                                        sale_label = "",
-                                        width = 170.dp,
-                                        onClick = { navController.navigate(
-                                            Screen.ProductDetailsScreen.passProductDetails(
-                                                it!!.id ?: 1
-                                            )
-                                        ) },
-                                        product = it
-                                    )
+                            -3 -> {
+                                gridItems(
+                                    shopsItems.itemCount,
+                                    nColumns = 2,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    shopsItems[it].let {
+                                        SaleProduct(
+                                            sale_label = "",
+                                            width = 170.dp,
+                                            onClick = {
+                                                navController.navigate(
+                                                    Screen.ProductDetailsScreen.passProductDetails(
+                                                        it!!.id ?: 1
+                                                    )
+                                                )
+                                            },
+                                            product = it
+                                        )
+                                    }
+                                }
+                            }
+
+                            else -> {
+                                gridItems(
+                                    productsByCategory.itemCount,
+                                    nColumns = 2,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    productsByCategory[it].let {
+                                        SaleProduct(
+                                            sale_label = "",
+                                            width = 170.dp,
+                                            onClick = {
+                                                navController.navigate(
+                                                    Screen.ProductDetailsScreen.passProductDetails(
+                                                        it!!.id ?: 1
+                                                    )
+                                                )
+                                            },
+                                            product = it
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -181,26 +213,32 @@ fun ShowAllScreen(
             }
             AnimatedVisibility(visible = !visible) {
                 LazyColumn(content = {
-                    when (productName) {
-                        -1 -> {
-                            items(products) {
-                                SaleProductList(navController, product = it)
+                    if (search.value.text.isNotEmpty()) {
+                        items(filteredProducts) {
+                            SaleProductList(navController, product = it)
+                        }
+                    } else {
+                        when (productName) {
+                            -1 -> {
+                                items(products) {
+                                    SaleProductList(navController, product = it)
+                                }
+                            }
+
+                            -2 -> {
+                                items(discProducts) {
+                                    SaleProductList(navController, product = it)
+                                }
+                            }
+
+                            else -> {
+                                items(productsByCategory) {
+                                    SaleProductList(navController, product = it)
+                                }
                             }
                         }
 
-                        -2 -> {
-                            items(discProducts) {
-                                SaleProductList(navController, product = it)
-                            }
-                        }
-
-                        else -> {
-                            items(productsByCategory) {
-                                SaleProductList(navController, product = it)
-                            }
-                        }
                     }
-
                 })
             }
         }
