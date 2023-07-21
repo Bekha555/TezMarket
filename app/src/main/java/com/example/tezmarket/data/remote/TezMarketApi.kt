@@ -27,6 +27,8 @@ import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.remote.model.user.UserData
 import retrofit2.Response
 import retrofit2.http.DELETE
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -160,16 +162,18 @@ interface TezMarketApi {
 
     @GET("profile/user")
     suspend fun getUser(): Response<UserData>
-    @JvmSuppressWildcards
+
+
     @GET("products")
+    @JvmSuppressWildcards
     suspend fun getFilteredProducts(
-        @QueryMap filterData: Map<String, Any>
+        @QueryMap filterData: HashMap<String, Any>
     ): Response<FilteredProducts>
 
 
     companion object Constants {
         const val AuthorizationToken =
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5MjkzODc5NDQ0NCIsImV4cCI6MTY4ODAzMDg1Nn0.k5dK8B9Lub7VGz3Ky8O_p2SJTQZYOGWBan4n6-1xoTM"
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5MjkzODc5NDQ0NCIsImV4cCI6MTY4OTMzNzI3N30.WIXyY1pvWarwmGuqHMwg3J2bvBkPyiULHtxeSWeA1ts"
     }
 
 }

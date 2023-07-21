@@ -11,8 +11,8 @@ class HeaderInterceptor() : Interceptor {
             .newBuilder()
             .apply {
                 addHeader("Accept", "application/json")
-                addHeader("Authorization", "Bearer ${TezMarketApi.AuthorizationToken}")
-              //  addHeader("Web", 1.toString())
+//                addHeader("Authorization", "Bearer ${TezMarketApi.AuthorizationToken}")
+                addHeader("Web", 1.toString())
             }.build()
     )
 }

@@ -63,7 +63,7 @@ class ProductRepositoryImpl @Inject constructor(private val tezMarketApi: TezMar
         ).flow
     }
 
-    override suspend fun getFilteredProducts(filterData: Map<String, Any>): Flow<Resource<FilteredProducts>> = call{
+    override suspend fun getFilteredProducts(filterData: HashMap<String, Any>): Flow<Resource<FilteredProducts>> = call{
         tezMarketApi.getFilteredProducts(filterData)
     }
 
