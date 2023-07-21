@@ -30,7 +30,7 @@ interface ProductsRepository {
 
     fun getProductByCategory(categoryId: Int) : Flow<PagingData<com.example.tezmarket.data.remote.model.prodouctsbycategory.Data>>
 
-    suspend fun getFilteredProducts(filterData: Map<String, Any>): Flow<Resource<FilteredProducts>>
+    suspend fun getFilteredProducts(filterData: HashMap<String, Any>): Flow<Resource<FilteredProducts>>
 
 
 }

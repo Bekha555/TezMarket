@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Categories(
     @Json(name = "data")
-    val `data`: List<Data> = listOf()
+    val `data`: List<Data>? = emptyList()
 )

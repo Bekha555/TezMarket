@@ -855,6 +855,140 @@ fun <T> SaleProduct(
                 }
             }
         }
+        is com.example.tezmarket.data.remote.model.filteredata.Data -> {
+            var selected by remember {
+                mutableStateOf(if (product.isFavorite == true) 1 else 0)
+            }
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
+                    .clickable(onClick = onClick)
+
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(200.dp)
+                )
+                {
+                    Box(
+                        modifier = Modifier
+                            .height(184.dp)
+                            .width(width)
+                    ) {
+                        AsyncImage(
+                            model = product.image,
+                            contentDescription = "sale",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .height(184.dp)
+                                .clip(shape = RoundedCornerShape(15.dp))
+                        )
+
+                        if (product.withDiscount == true) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .padding(start = 8.dp, top = 8.dp)
+                                    .background(
+                                        shape = RoundedCornerShape(25.dp),
+                                        color = if (sale_label.contains("NEW") or sale_label.contains(
+                                                "New"
+                                            )
+                                        ) {
+                                            Black
+                                        } else {
+                                            Primary
+                                        }
+                                    )
+                                    .align(Alignment.TopStart)
+                            ) {
+                                Text(
+                                    text = product.percentageDiscount.toString() + "%",
+                                    fontSize = 11.sp,
+                                    color = White,
+                                    modifier = Modifier
+                                        .padding(vertical = 5.dp, horizontal = 10.dp)
+                                )
+                            }
+                        }
+                    }
+                    AnimatedButtons(
+                        modifier = Modifier.align(Alignment.BottomEnd),
+                        product.isFavorite ?: false,
+                        false,
+                        favoriteToggle = {
+                            favoritesViewModel.favoritesToggle(
+                                product.id ?: 1,
+                                productType = "product"
+                            )
+                        },
+                        cartAdd = {
+                            cartViewModel.addCartProduct(product.id ?: 1, 1)
+                        },
+                        cartDel = {
+                            cartViewModel.delCartProduct(product.id ?: 1)
+                        }
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .height(14.dp)
+                            .align(Alignment.BottomStart)
+                    ) {
+                        product.avgRating?.let {
+                            RatingBar(
+                                startRating = it,
+                                selectable = false,
+                                ratingSelected = {},
+                                text = product.avgRating.toString(),
+                                modifier = Modifier
+                                    .size(12.dp)
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = product.category?.name.toString(),
+                    color = Gray,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily(Font(R.font.metropolis_regular))
+                )
+                Text(
+                    text = product.name.toString(),
+                    maxLines = 2,
+                    color = Black,
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                    modifier = Modifier.width(width)
+                )
+                Row {
+                    if (product.withDiscount == true) {
+                        Text(
+                            text = product.price.toString() + "TJS",  // Без скидки
+                            style = TextStyle(textDecoration = TextDecoration.LineThrough),
+                            color = Gray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    }
+                    Text(
+                        text = if (product.withDiscount == true) {
+                            product.discountedPrice.toString() + "TJS"
+                        } else {
+                            product.price.toString() + "TJS"
+                        },                                               // Со скидкой
+                        color = if (product.withDiscount == true) {
+                            Primary
+                        } else {
+                            Gray
+                        },
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(start = 3.dp)
+                    )
+                }
+            }
+        }
     }
 }
 

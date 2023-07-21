@@ -3,6 +3,7 @@
 package com.example.tezmarket.ui.common
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -10,9 +11,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,14 +33,20 @@ import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
 
 @Composable
-inline fun <reified T> SaleProductScroll(
+fun <T> SaleProductScroll(
     title: String,
     title_mid: String,
     sale_label: String,
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel(),
     products: List<T>
 ) {
+    var product: T? = null
+    if (products.isNotEmpty()){
+        LaunchedEffect(key1 = Unit) {
+            product = products.first()
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -60,9 +69,18 @@ inline fun <reified T> SaleProductScroll(
                 fontFamily = FontFamily(Font(R.font.metropolis_bold))
             )
             TextButton(onClick = {
-                navController.navigate(
-                    Screen.ShowAllScreen.passProductName(1)
-                )
+                when (product) {
+                    is Data -> {
+                        navController.navigate(Screen.ShowAllScreen.passProductName(-1))
+                    }
+                    is com.example.tezmarket.data.remote.model.discProducts.Data -> {
+                        navController.navigate(Screen.ShowAllScreen.passProductName(-2))
+                    }
+
+                    is com.example.tezmarket.data.remote.model.shops.Data -> {
+                        navController.navigate(Screen.ShowAllScreen.passProductName(-3))
+                    }
+                }
             }) {
                 Text(text = "Показать все", fontSize = 11.sp, color = Black)
             }
@@ -101,7 +119,7 @@ inline fun <reified T> SaleProductScroll(
                                         }
 
                                         else -> {
-                                            1
+                                            0
                                         }
                                     }
                                 )
