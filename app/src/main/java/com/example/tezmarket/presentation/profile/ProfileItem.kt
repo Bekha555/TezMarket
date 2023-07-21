@@ -71,9 +71,9 @@ fun ProfileItem(title: String, subtitle: String, onClick: () -> Unit) {
 
 
 @Composable
-fun ProfileSection(categoriesViewModel: CategoriesViewModel = hiltViewModel()) {
+fun ProfileSection(profileViewModel: ProfileViewModel = hiltViewModel()) {
 
-    val user = categoriesViewModel.userUiState.data?.data
+    val user = profileViewModel.userUiState.data?.data
 
     Row(
         modifier = Modifier

@@ -6,14 +6,12 @@ import com.example.tezmarket.data.remote.model.AdressPagingSource
 import com.example.tezmarket.data.remote.model.adress.AddAdress
 import com.example.tezmarket.data.remote.model.adress.AdressById
 import com.example.tezmarket.data.remote.model.adress.AdressesData
-import com.example.tezmarket.data.remote.model.adress.Data
 import com.example.tezmarket.data.remote.model.adress.DataX
 import com.example.tezmarket.data.remote.model.adress.UpdateAdress
 import com.example.tezmarket.domain.AdressRepository
 import com.example.tezmarket.utils.Resource
 import com.example.tezmarket.utils.SafeApiCall
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 import javax.inject.Inject
 
 class AdressRepositoryImpl @Inject constructor(private val tezMarketApi: TezMarketApi) :

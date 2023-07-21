@@ -76,7 +76,7 @@ fun MyOrderScreen(navController: NavController) {
                 onClick = { /*TODO*/ },
                 modifier = Modifier,
                 lazyListState = LazyListState(),
-                navController = rememberNavController()
+                navController = navController
             )
             AppThemeTopText(
                 text = "Мои заказы",

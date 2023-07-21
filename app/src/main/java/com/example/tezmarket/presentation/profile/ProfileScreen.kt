@@ -9,8 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tezmarket.navigation.BottomNavigation
 import com.example.tezmarket.navigation.Screen
@@ -19,7 +20,10 @@ import com.example.tezmarket.ui.common.AppThemeTopText
 import com.example.tezmarket.ui.theme.Background
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
@@ -39,19 +43,30 @@ fun ProfileScreen(navController: NavController) {
                 lazyListState = LazyListState()
             )
         },
-        bottomBar = { BottomNavigation(navController = navController) }, backgroundColor = Background)
+        bottomBar = { BottomNavigation(navController = navController) },
+        backgroundColor = Background
+    )
     { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            AppThemeTopText(text = "Мой профиль", color = White, shadow = false, modifier = Modifier)
+            AppThemeTopText(
+                text = "Мой профиль",
+                color = Transparent,
+                shadow = false,
+                modifier = Modifier
+            )
             ProfileSection()
             ProfileItem(
                 title = "Мои заказы",
                 subtitle = "Уже есть 12 заказов",
                 onClick = { navController.navigate(Screen.MyOrdersScreen.route) })
+            ProfileItem(
+                title = "Мои объявления",
+                subtitle = "4 объявления",
+                onClick = { navController.navigate(Screen.MyAdvertisementsScreen.route) })
             ProfileItem(title = "Адреса доставки", subtitle = "3 адреса", onClick = {})
             ProfileItem(title = "Способы оплаты", subtitle = "Visa  **34", onClick = {})
             ProfileItem(

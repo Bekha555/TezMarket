@@ -1,5 +1,6 @@
 package com.example.tezmarket.data.remote
 
+import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
 import com.example.tezmarket.data.remote.model.addcart.AddCartProduct
 import com.example.tezmarket.data.remote.model.adress.AddAdress
 import com.example.tezmarket.data.remote.model.adress.AdressById
@@ -14,7 +15,9 @@ import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoriteProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoritesToggle
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
+import com.example.tezmarket.data.remote.model.filteredata.FilteredData
 import com.example.tezmarket.data.remote.model.modcart.ModCartProduct
+import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.ProductByCategory
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
 import com.example.tezmarket.data.remote.model.productrating.AddProductRating
@@ -23,6 +26,7 @@ import com.example.tezmarket.data.remote.model.products.ProductsData
 import com.example.tezmarket.data.remote.model.recproducts.RecProducts
 import com.example.tezmarket.data.remote.model.shops.ShopsData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
+import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -32,6 +36,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
+import java.io.File
 
 
 interface TezMarketApi {
@@ -158,11 +163,35 @@ interface TezMarketApi {
     suspend fun getFilterData(): Response<FilterData>
 
     @GET("profile/user")
-    suspend fun getUser() : Response<UserData>
+    suspend fun getUser(): Response<UserData>
+
+    @GET("profile/advertisements")
+    suspend fun getMyAdvertisements(): Response<MyAdvertisementsData>
+
+    @POST("profile/advertisements")
+    suspend fun addAdvertisement(
+        @Query("title") title: String,
+        @Query("price") price: Int,
+        @Query("category_id") category_id: Int,
+        @Query("description") description: String,
+        @Query("images") images: String,
+        @Query("attribute_id") attribute_id: Int,
+    ): Response<AddAdvertisement>
+
+    @GET("products")
+    @JvmSuppressWildcards
+    suspend fun getFilteredProducts(
+        @QueryMap filterData: Map<String, Any>
+    ): Response<FilteredData>
+
+    @GET("upload-file")
+    suspend fun uploadFile(
+        @Query("file") files: File
+    ): Response<UploadFiles>
 
 
     companion object Constants {
-        const val AuthorizationToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5MjkzODc5NDQ0NCIsImV4cCI6MTY4ODAzMDg1Nn0.k5dK8B9Lub7VGz3Ky8O_p2SJTQZYOGWBan4n6-1xoTM"
+        const val AuthorizationToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5Mjc3NzAwMDQ0NCIsImV4cCI6MTY4OTYwMTI2NH0.eFCMoKEwVNlLcyK2paFNR5lzeUzMswa04EUvjtPs-OY"
     }
 
 }

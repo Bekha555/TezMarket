@@ -6,10 +6,12 @@ import com.example.tezmarket.domain.ProfileRepository
 import com.example.tezmarket.utils.Resource
 import com.example.tezmarket.utils.SafeApiCall
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ProfileRepositoryImpl(private val tezMarketApi: TezMarketApi) : ProfileRepository,
+class ProfileRepositoryImpl @Inject constructor(private val tezMarketApi: TezMarketApi) : ProfileRepository,
     SafeApiCall() {
     override suspend fun getUser(): Flow<Resource<UserData>> = call {
         tezMarketApi.getUser()
     }
+
 }

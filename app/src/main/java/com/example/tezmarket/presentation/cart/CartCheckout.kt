@@ -61,7 +61,7 @@ fun CartCheckout(navController: NavController) {
                 searchText = searchText,
                 onValueChange = {},
                 onClick = { /*TODO*/ },
-                navController = rememberNavController(),
+                navController = navController,
                 modifier = Modifier,
                 lazyListState = LazyListState()
             )

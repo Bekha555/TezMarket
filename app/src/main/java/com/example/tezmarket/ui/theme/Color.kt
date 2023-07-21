@@ -8,7 +8,7 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val Gray = Color(0xFF9B9B9B)
-val LightGray = Color(0xFFDDDDDD)
+val LightGray = Color(0xFFE7E7E7)
 val Background = Color(0xFFF9F9F9)
 val Primary = Color(0xFF821EBE)
 val Error = Color(0xFFF01F0E)
