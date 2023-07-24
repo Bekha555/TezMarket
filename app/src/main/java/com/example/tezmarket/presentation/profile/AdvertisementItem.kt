@@ -97,7 +97,7 @@ fun AdvertisementItem(onClick: () -> Unit, data: Data) {
                 Text(
                     text = advertisements.name.toString(),
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .padding(start = 15.dp, top = 10.dp)
                         .align(Alignment.TopStart)
@@ -111,7 +111,7 @@ fun AdvertisementItem(onClick: () -> Unit, data: Data) {
                     Text(text = "категория:", fontSize = 14.sp, color = Gray)
                     Text(
                         text = advertisements.category?.name.toString(),
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(start = 5.dp)
                     )
                 }
@@ -124,7 +124,7 @@ fun AdvertisementItem(onClick: () -> Unit, data: Data) {
                     Text(text = "цена:", fontSize = 14.sp, color = Gray)
                     Text(
                         text = advertisements.price.toString() + "c",
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(start = 5.dp)
                     )
                 }

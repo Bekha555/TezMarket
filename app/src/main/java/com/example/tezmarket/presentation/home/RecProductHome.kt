@@ -31,7 +31,7 @@ import com.example.tezmarket.ui.theme.Gray
 @Composable
 fun RecProductHome(homeViewModel: HomeViewModel = hiltViewModel()) {
     val recProducts = homeViewModel.recProductItems.collectAsLazyPagingItems()
-   val total = recProducts.itemSnapshotList.size
+    val total = recProducts.itemSnapshotList.size
 
     Column(
         modifier = Modifier
@@ -54,7 +54,7 @@ fun RecProductHome(homeViewModel: HomeViewModel = hiltViewModel()) {
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = FontFamily(Font(R.font.metropolis_bold))
             )
-                Text(text = "$total  товаров", fontSize = 11.sp, color = Color.Black)
+            Text(text = "$total  товаров", fontSize = 11.sp, color = Color.Black)
         }
         Text(
             text = "Вам может понравиться",
@@ -66,7 +66,6 @@ fun RecProductHome(homeViewModel: HomeViewModel = hiltViewModel()) {
         )
     }
 }
-
 
 
 fun LazyListScope.gridItems(
@@ -92,7 +91,12 @@ fun <T> LazyListScope.gridItems(
 ) {
     val rows = if (data.isEmpty()) 0 else 1 + (data.count() - 1) / nColumns
     items(rows) { rowIndex ->
-        Row(modifier = Modifier.fillMaxWidth() .padding(horizontal = 23.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 23.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             for (columnIndex in 0 until nColumns) {
                 val itemIndex = rowIndex * nColumns + columnIndex
                 if (itemIndex < data.count()) {
@@ -100,7 +104,8 @@ fun <T> LazyListScope.gridItems(
                     androidx.compose.runtime.key(key?.invoke(item)) {
                         Box(
                             modifier = Modifier.padding(bottom = 15.dp),
-                            propagateMinConstraints = true) {
+                            propagateMinConstraints = true
+                        ) {
                             itemContent.invoke(this, item)
                         }
                     }

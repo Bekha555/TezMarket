@@ -193,7 +193,7 @@ interface TezMarketApi {
 
 
     companion object Constants {
-        const val AuthorizationToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5Mjc3NzAwMDQ0NCIsImV4cCI6MTY4OTYwMTI2NH0.eFCMoKEwVNlLcyK2paFNR5lzeUzMswa04EUvjtPs-OY"
+        const val AuthorizationToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwaG9uZSI6Ijk5Mjc3NzAwMDQ0NCIsImV4cCI6MTY5MDE3OTUwMn0.29WL4Ah8rvGuKl3nFout8HFvzTHvNYG4BsaisOV-phY"
     }
 
 }

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCancellationBehavior
@@ -44,7 +46,8 @@ fun HomeScreen(
     })
 
     val products = homeViewModel.productItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
-    val discProducts = homeViewModel.discProductItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
+    val discProducts =
+        homeViewModel.discProductItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
     val recProducts = homeViewModel.recProductItems.collectAsLazyPagingItems()
     val shops = homeViewModel.shopsItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
     val banners = homeViewModel.bannersUiState.data?.data ?: emptyList()
@@ -141,7 +144,6 @@ fun HomeScreen(
                                     products = advertisements
                                 )
                             }
-
                             item { RecProductHome() }
                             gridItems(
                                 recProducts.itemCount,
@@ -157,8 +159,19 @@ fun HomeScreen(
                                     )
                                 }
                             }
-                        }
+//                            recProducts.loadState.append.let { loadState ->
+//                                if (loadState is LoadState.Loading) {
+//                                    item {
+//                                        CircularProgressIndicator(
+//                                            modifier = Modifier
+//                                                .fillMaxWidth()
+//                                                .padding(16.dp)
+//                                        )
+//                                    }
+//                                }
+//                            }
 
+                        }
                     }
                 }
             }
