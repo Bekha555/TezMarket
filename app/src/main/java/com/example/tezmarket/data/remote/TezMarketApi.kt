@@ -16,6 +16,7 @@ import com.example.tezmarket.data.remote.model.favorites.FavoriteProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoritesToggle
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredData
+import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.modcart.ModCartProduct
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.ProductByCategory
@@ -165,6 +166,7 @@ interface TezMarketApi {
     @GET("profile/user")
     suspend fun getUser(): Response<UserData>
 
+
     @GET("profile/advertisements")
     suspend fun getMyAdvertisements(): Response<MyAdvertisementsData>
 
@@ -182,7 +184,7 @@ interface TezMarketApi {
     @JvmSuppressWildcards
     suspend fun getFilteredProducts(
         @QueryMap filterData: Map<String, Any>
-    ): Response<FilteredData>
+    ): Response<FilteredProducts>
 
     @GET("upload-file")
     suspend fun uploadFile(

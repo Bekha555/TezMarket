@@ -13,11 +13,11 @@ import androidx.paging.cachedIn
 import com.example.tezmarket.data.remote.model.advertisements.Advertisements
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
-import com.example.tezmarket.data.remote.model.filteredata.FilteredData
+
+import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.Data
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
 import com.example.tezmarket.data.remote.model.products.ProductsData
-import com.example.tezmarket.data.remote.model.shops.ShopsData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.repositoryimpl.ProductRepositoryImpl
 import com.example.tezmarket.data.repositoryimpl.ShopsRepositoryImpl
@@ -49,8 +49,10 @@ class HomeViewModel @Inject constructor(
     var advertisementsUiState by mutableStateOf(UiState<Advertisements>())
         private set
 
+    var filteredProductsUiState by mutableStateOf(UiState<FilteredProducts>())
+        private set
 
-    var filteredDataUiState by mutableStateOf(UiState<FilteredData>())
+    var filteredDataUiState by mutableStateOf(UiState<FilteredProducts>())
         private set
 
     fun getHomeData() {

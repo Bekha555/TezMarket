@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,12 +20,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.example.tezmarket.data.remote.model.products.Data
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.common.Filters
@@ -46,6 +51,7 @@ fun ShowAllScreen(
     var search = remember {
         mutableStateOf(TextFieldValue(""))
     }
+    val state = rememberLazyGridState()
 
     LaunchedEffect(key1 = true, block = {
         if (productName != -1 && productName != -2 && productName != -3 && productName != 0) {
@@ -57,7 +63,8 @@ fun ShowAllScreen(
     val discProducts = homeViewModel.discProductItems.collectAsLazyPagingItems()
     val products = homeViewModel.productItems.collectAsLazyPagingItems()
     val shopsItems = homeViewModel.shopsItems.collectAsLazyPagingItems()
-    val filteredProducts = homeViewModel.filteredDataUiState.data?.data ?: emptyList()
+    val filteredProducts = homeViewModel.filteredProductsUiState.data?.data ?: emptyList()
+
 
     Scaffold(
         topBar = {
@@ -201,6 +208,7 @@ fun ShowAllScreen(
                                 onClick = { /*TODO*/ },
                                 product = it
                             )
+                            SaleProductList(navController, product = it)
                         }
                     } else {
                         when (productName) {
@@ -229,6 +237,7 @@ fun ShowAllScreen(
         }
     }
 }
+//git
 
 
 

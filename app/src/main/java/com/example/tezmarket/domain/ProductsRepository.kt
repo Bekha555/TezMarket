@@ -5,9 +5,8 @@ import androidx.paging.PagingSource
 import com.example.tezmarket.data.remote.model.advertisements.Advertisements
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
-import com.example.tezmarket.data.remote.model.filteredata.FilteredData
+import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
-import com.example.tezmarket.data.remote.model.products.ProductsData
 import com.example.tezmarket.data.remote.model.recproducts.Data
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.utils.Resource
@@ -30,6 +29,6 @@ interface ProductsRepository {
 
     fun getProductByCategory(categoryId: Int) : Flow<PagingData<com.example.tezmarket.data.remote.model.prodouctsbycategory.Data>>
 
-    suspend fun getFilteredProducts(filteredData: Map<String, Any>): Flow<Resource<FilteredData>>
+    suspend fun getFilteredProducts(filterData: Map<String, Any>): Flow<Resource<FilteredProducts>>
 
 }
