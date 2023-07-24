@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.example.tezmarket.navigation.AppNavigation
+import com.example.tezmarket.presentation.home.TestScreen
 import com.example.tezmarket.ui.theme.TezMarketTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint

@@ -31,6 +31,8 @@ import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
 import retrofit2.Response
 import retrofit2.http.DELETE
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -166,7 +168,6 @@ interface TezMarketApi {
     @GET("profile/user")
     suspend fun getUser(): Response<UserData>
 
-
     @GET("profile/advertisements")
     suspend fun getMyAdvertisements(): Response<MyAdvertisementsData>
 
@@ -183,7 +184,7 @@ interface TezMarketApi {
     @GET("products")
     @JvmSuppressWildcards
     suspend fun getFilteredProducts(
-        @QueryMap filterData: Map<String, Any>
+        @QueryMap filterData: HashMap<String, Any>
     ): Response<FilteredProducts>
 
     @GET("upload-file")

@@ -303,5 +303,93 @@ inline fun <reified T> SaleProductList(
                     cartDel = { cartViewModel.delCartProduct(product.id ?: 1) })
             }
         }
+
+        is com.example.tezmarket.data.remote.model.filteredata.Data -> {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 15.dp)
+                    .clickable {
+                        navController.navigate(
+                            Screen.ProductDetailsScreen.passProductDetails(
+                                product.id ?: 1
+                            )
+                        )
+                    }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
+                        .background(color = White, shape = RoundedCornerShape(15.dp)),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .clip(RoundedCornerShape(bottomStart = 15.dp, topStart = 15.dp)),
+                        model = product.image,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                    )
+                    Column(
+                        modifier = Modifier.padding(
+                            start = 10.dp,
+                            top = 10.dp,
+                            bottom = 10.dp,
+                            end = 10.dp
+                        )
+                    ) {
+                        Text(
+                            text = product.name ?: "",
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            color = Black
+                        )
+                        Text(
+                            text = "Mango",
+                            fontSize = 11.sp,
+                            fontFamily = FontFamily(Font(R.font.metropolis_regular)),
+                            color = Gray
+                        )
+                        RatingBar(
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp)
+                                .size(12.dp),
+                            startRating = product.avgRating!!.toInt(),
+                            selectable = false,
+                            ratingSelected = {},
+                            text = product.avgRating.toString()
+                        )
+                        Text(
+                            text = product.price.toString() + "TJS",
+                            color = Black,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                    }
+                }
+                AnimatedButtons(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    isFavorite = product.isFavorite ?: false,
+                    isCart = false,
+                    favoriteToggle = {
+                        favoritesViewModel.favoritesToggle(
+                            product.id ?: 1,
+                            productType = "product"
+                        )
+                    },
+                    cartAdd = {
+                        cartViewModel.addCartProduct(
+                            product.id ?: 1,
+                            productQuantity = 1
+                        )
+                    },
+                    cartDel = { cartViewModel.delCartProduct(product.id ?: 1) })
+            }
+        }
+
     }
 }

@@ -219,7 +219,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getFilteredProducts(filteredData: Map<String, Any>){
+    fun getFilteredProducts(filteredData: HashMap<String, Any>){
         viewModelScope.launch {
             productRepositoryImpl.getFilteredProducts(filteredData).collect{result ->
                 filteredDataUiState = when (result) {

@@ -59,7 +59,7 @@ fun CategoriesScreen(
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(categories) { category ->
                     CategoryCard(modifier = Modifier.clickable {
-                        navController.navigate(Screen.ShowAllScreen.passProductName(category.id!!))
+                        navController.navigate(Screen.ShowAllScreen.passProductName(category.id ?: 1))
                     }, category = category)
                 }
             }
