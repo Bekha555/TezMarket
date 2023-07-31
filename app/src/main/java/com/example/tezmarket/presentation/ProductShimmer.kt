@@ -72,21 +72,14 @@ fun AnimateProductShimmer() {
 @Composable
 fun Product(brush: Brush) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
                     .height(420.dp)
-                    .width(280.dp)
+                    .fillMaxWidth()
                     .padding(end = 5.dp)
                     .background(brush)
             )
-            Box(
-                modifier = Modifier
-                    .height(420.dp)
-                    .width(200.dp)
-                    .background(brush)
-            )
-        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

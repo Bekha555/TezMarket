@@ -570,7 +570,9 @@ fun <T> SaleProduct(
                             model = product.image,
                             contentDescription = "sale",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.clip(shape = RoundedCornerShape(15.dp))
+                            modifier = Modifier
+                                .height(184.dp)
+                                .clip(shape = RoundedCornerShape(15.dp))
                         )
 
                         if (product.withDiscount == true) {
@@ -618,6 +620,7 @@ fun <T> SaleProduct(
                             cartViewModel.delCartProduct(product.id ?: 1)
                         }
                     )
+
                     Box(
                         modifier = Modifier
                             .height(14.dp)

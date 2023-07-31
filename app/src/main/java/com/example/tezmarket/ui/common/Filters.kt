@@ -2,7 +2,6 @@ package com.example.tezmarket.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,23 +11,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tezmarket.R
-import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Shadow
 
 
@@ -47,10 +41,12 @@ fun Filters(onClick: () -> Unit, grid: () -> Unit, filter: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .background(White)
+            .background(Transparent)
             .fillMaxWidth()
             .height(70.dp)
             .padding(top = 10.dp)
+
+
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),

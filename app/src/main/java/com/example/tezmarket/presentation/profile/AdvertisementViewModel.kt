@@ -6,11 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
+import com.example.tezmarket.data.remote.model.deleteAdvertisement.DeleteAdvertisementData
+import com.example.tezmarket.data.remote.model.myadvertisements.Data
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
 import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.repositoryimpl.AdvertisementRepositoryImpl
 import com.example.tezmarket.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import tj.tcell.tcellexchange.utils.UiState
 import java.io.File
@@ -26,10 +29,14 @@ class AdvertisementViewModel @Inject constructor(
         private set
     var uploadFilesUiState by mutableStateOf(UiState<UploadFiles>())
         private set
+    var deleteAdvertisementUiState by mutableStateOf(UiState<DeleteAdvertisementData>())
 
-    init {
-        getMyAdvertisements()
-    }
+    private val _advertisements = MutableStateFlow<List<Data>>(emptyList())
+
+    val advertisements: MutableStateFlow<List<Data>>
+        get() = _advertisements
+
+
 
     fun getMyAdvertisements() {
         viewModelScope.launch {
@@ -52,6 +59,7 @@ class AdvertisementViewModel @Inject constructor(
                     }
                 }
             }
+            _advertisements.value = myAdvertisementsUiState.data?.data ?: emptyList()
         }
     }
 
@@ -92,6 +100,37 @@ class AdvertisementViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteAdvertisement(
+        advertisement_id: Int
+    ) {
+        viewModelScope.launch {
+            advertisementRepositoryImpl.deleteAddvertisement(
+                advertisement_id
+            ).collect { result ->
+                deleteAdvertisementUiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+            getMyAdvertisements()
+        }
+    }
+
+
 
     fun uploadFile(
         file: File

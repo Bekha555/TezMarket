@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalStdlibApi::class)
 
 package com.example.tezmarket.utils
 
@@ -44,7 +43,7 @@ sealed class Resource<out T : Any> {
     data class NetworkError(val exception: Exception, val code: Int = 0) : Resource<Nothing>()
     object Loading : Resource<Nothing>()
 }
-
+@OptIn(ExperimentalStdlibApi::class)
 fun <T : Any> Response<T>.parseError(): Resource<T> {
     return try {
         val moshi = Moshi.Builder().build()

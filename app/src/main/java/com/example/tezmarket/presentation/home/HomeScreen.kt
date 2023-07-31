@@ -153,7 +153,7 @@ fun HomeScreen(
                                 recProducts[it].let {
                                     SaleProduct(
                                         sale_label = "",
-                                        width = 170.dp,
+                                        width = 150.dp,
                                         onClick = { /*TODO*/ },
                                         product = it
                                     )

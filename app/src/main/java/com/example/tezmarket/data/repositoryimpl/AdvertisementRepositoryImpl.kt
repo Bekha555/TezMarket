@@ -2,6 +2,7 @@ package com.example.tezmarket.data.repositoryimpl
 
 import com.example.tezmarket.data.remote.TezMarketApi
 import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
+import com.example.tezmarket.data.remote.model.deleteAdvertisement.DeleteAdvertisementData
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
 import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.domain.AdvertisementRepository
@@ -26,6 +27,10 @@ class AdvertisementRepositoryImpl @Inject constructor(private val tezMarketApi: 
         attribute_id: Int
     ): Flow<Resource<AddAdvertisement>> = call {
         tezMarketApi.addAdvertisement(title, price, category_id, description, images, attribute_id)
+    }
+
+    override suspend fun deleteAddvertisement(advertisement_id: Int): Flow<Resource<DeleteAdvertisementData>> = call {
+        tezMarketApi.deleteAddvertisement(advertisement_id)
     }
 
     override suspend fun uploadFile(file: File): Flow<Resource<UploadFiles>> = call {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,9 +37,11 @@ fun TopText(text: String, color: Color) {
                 Font(R.font.metropolis_bold)
             ),
             fontWeight = FontWeight.Bold,
+            maxLines = 2,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 3.dp)
+                .width(300.dp)
         )
     }
 }

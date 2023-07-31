@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tezmarket.R
 import com.example.tezmarket.data.remote.model.myadvertisements.Data
 import com.example.tezmarket.ui.theme.Gray
@@ -45,7 +46,7 @@ import kotlin.math.roundToInt
 
 @ExperimentalMaterialApi
 @Composable
-fun AdvertisementItem(onClick: () -> Unit, data: Data) {
+fun AdvertisementItem(onClick: () -> Unit, data: Data, advertisementViewModel: AdvertisementViewModel = hiltViewModel()) {
     var bgColor by remember { mutableStateOf(Purple200) }
     val squareSize = 65.dp
     val swipeAbleState = rememberSwipeableState(initialValue = 0)
@@ -70,7 +71,7 @@ fun AdvertisementItem(onClick: () -> Unit, data: Data) {
             .clickable(onClick = onClick)
     ) {
         IconButton(
-            onClick = { /*TODO*/ }, modifier = Modifier
+            onClick = { advertisements.id?.let { advertisementViewModel.deleteAdvertisement(advertisement_id = it) } }, modifier = Modifier
                 .padding(end = 10.dp)
                 .align(
                     Alignment.CenterEnd

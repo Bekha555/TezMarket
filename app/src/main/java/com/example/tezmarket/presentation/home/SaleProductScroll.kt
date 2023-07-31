@@ -40,13 +40,6 @@ fun <T> SaleProductScroll(
     navController: NavController,
     products: List<T>
 ) {
-    var product: T? = null
-    if (products.isNotEmpty()){
-        LaunchedEffect(key1 = Unit) {
-            product = products.first()
-        }
-    }
-
 
     Column(
         modifier = Modifier
@@ -69,7 +62,7 @@ fun <T> SaleProductScroll(
                 fontFamily = FontFamily(Font(R.font.metropolis_bold))
             )
             TextButton(onClick = {
-                when (product) {
+                when (products.first()) {
                     is Data -> {
                         navController.navigate(Screen.ShowAllScreen.passProductName(-1))
                     }

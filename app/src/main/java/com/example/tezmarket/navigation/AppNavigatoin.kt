@@ -21,6 +21,8 @@ import com.example.tezmarket.presentation.home.HomeScreen
 import com.example.tezmarket.presentation.home.ShowAllScreen
 import com.example.tezmarket.presentation.product.ProductDetailsScreen
 import com.example.tezmarket.presentation.profile.AddAdvertisementScreen
+import com.example.tezmarket.presentation.profile.ChooseAttributs
+import com.example.tezmarket.presentation.profile.ChooseCategory
 import com.example.tezmarket.presentation.profile.MyAdvertisementsScreen
 import com.example.tezmarket.presentation.profile.MyOrderScreen
 import com.example.tezmarket.presentation.profile.OrderDetailsScreen
@@ -101,6 +103,12 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable(route = Screen.AddAdvertisementScreen.route) {
             AddAdvertisementScreen(navController)
+        }
+        composable(route = Screen.ChooseCategory.route) {
+            ChooseCategory(navController)
+        }
+        composable(route = Screen.ChooseAttributs.route) {
+            ChooseAttributs(navController)
         }
     }
 

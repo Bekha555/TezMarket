@@ -1,6 +1,7 @@
 package com.example.tezmarket.domain
 
 import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
+import com.example.tezmarket.data.remote.model.deleteAdvertisement.DeleteAdvertisementData
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
 import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.utils.Resource
@@ -17,6 +18,8 @@ interface AdvertisementRepository {
         images: String,
         attribute_id: Int
     ): Flow<Resource<AddAdvertisement>>
+
+    suspend fun deleteAddvertisement(advertisement_id: Int): Flow<Resource<DeleteAdvertisementData>>
 
     suspend fun uploadFile(file: File): Flow<Resource<UploadFiles>>
 

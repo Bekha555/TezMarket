@@ -44,6 +44,9 @@ sealed class Screen(val route: String) {
     }
     object MyAdvertisementsScreen : Screen("my_advertisements_screen")
     object AddAdvertisementScreen : Screen("add_advertisement_screen")
+    object ChooseCategory : Screen("choose_category")
+    object ChooseAttributs : Screen("choose_attributs")
+
 
 
 }

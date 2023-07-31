@@ -11,11 +11,11 @@ import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.cart.Cart
 import com.example.tezmarket.data.remote.model.categories.Categories
 import com.example.tezmarket.data.remote.model.delcart.DelCartProduct
+import com.example.tezmarket.data.remote.model.deleteAdvertisement.DeleteAdvertisementData
 import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoriteProducts
 import com.example.tezmarket.data.remote.model.favorites.FavoritesToggle
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
-import com.example.tezmarket.data.remote.model.filteredata.FilteredData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.modcart.ModCartProduct
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
@@ -31,8 +31,6 @@ import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
 import retrofit2.Response
 import retrofit2.http.DELETE
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -180,6 +178,11 @@ interface TezMarketApi {
         @Query("images") images: String,
         @Query("attribute_id") attribute_id: Int,
     ): Response<AddAdvertisement>
+
+    @DELETE("profile/advertisements/{advertisement_id}")
+    suspend fun deleteAddvertisement(
+        @Path("advertisement_id") advertisement_id: Int
+    ): Response<DeleteAdvertisementData>
 
     @GET("products")
     @JvmSuppressWildcards

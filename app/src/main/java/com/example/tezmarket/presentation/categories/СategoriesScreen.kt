@@ -16,11 +16,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.tezmarket.navigation.BottomNavigation
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.categories.CategoriesViewModel
 import com.example.tezmarket.presentation.categories.CategoryCard
-import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeTopBar
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,11 +47,6 @@ fun CategoriesScreen(
             modifier = Modifier,
             lazyListState = LazyListState()
         )
-    }, bottomBar = {
-        Column {
-            AppThemeButton(text = "ПОСМОТРЕТЬ ВСЕ ТОВАРЫ") {}
-            BottomNavigation(navController = navController)
-        }
     }) {
         Column {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
