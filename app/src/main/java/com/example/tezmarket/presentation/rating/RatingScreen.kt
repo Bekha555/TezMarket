@@ -3,6 +3,7 @@ package com.example.tezmarket.presentation.rating
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -68,7 +70,7 @@ fun RatingScreen(
         skipHalfExpanded = true
     )
     val coroutineScope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     var reviewText: String = ""
     var productRating: Int = 1
 
@@ -94,6 +96,8 @@ fun RatingScreen(
                         productComment = reviewText,
                         productRating = productRating
                     )
+                    coroutineScope.launch { modalBottomSheetState.hide() }
+                    Toast.makeText(context, "Коментарий отправлен на проверку", Toast.LENGTH_LONG).show()
                 },
                 reviewTextValue = { reviewText = it },
                 selectedRating = { productRating = it })
