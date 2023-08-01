@@ -63,13 +63,6 @@ fun RatingScreen(
         mutableStateOf(TextFieldValue(""))
     }
 
-
-//    if (addProductRatingState.data != null){
-//        LaunchedEffect(key1 = Unit, block = {
-//            ratingViewModel,
-//        })
-//    }
-
     val modalBottomSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true
@@ -78,6 +71,16 @@ fun RatingScreen(
 
     var reviewText: String = ""
     var productRating: Int = 1
+
+    val ratingOfFive = productRatingInfo?.ratings
+    val ratingList = mutableListOf<Int>()
+    ratingList.add(ratingOfFive?.x1 ?: 0)
+    ratingList.add(ratingOfFive?.x2 ?: 0)
+    ratingList.add(ratingOfFive?.x3 ?: 0)
+    ratingList.add(ratingOfFive?.x4 ?: 0)
+    ratingList.add(ratingOfFive?.x5 ?: 0)
+    Log.e("ratings yusuf", ratingOfFive.toString())
+
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
@@ -131,7 +134,7 @@ fun RatingScreen(
                 }
                 item {
                     if (productRatingInfo != null) {
-                        RatingSection(productRatingInfo = productRatingInfo)
+                        RatingSection(productRatingInfo = productRatingInfo, ratingList = ratingList)
                     }
                 }
                 items(productRatingInfo?.reviews?.data ?: emptyList()) {
@@ -198,16 +201,6 @@ fun RatingBottomSheet(
 ) {
     var reviewText by remember { mutableStateOf("") }
     val localFocusManager = LocalFocusManager.current
-    val mutableUriList = remember { mutableStateListOf<Uri?>() }
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetMultipleContents(),
-        onResult = { uris ->
-            uris.forEach {
-                mutableUriList.add(it)
-            }
-            Log.d("debug", mutableUriList.toString())
-        }
-    )
 
     Box(
         modifier = Modifier
@@ -275,54 +268,6 @@ fun RatingBottomSheet(
                     reviewTextValue(it)
                 },
                 placeholder = { Text(text = "Ваш отзыв") })
-//            LazyRow(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 20.dp, vertical = 30.dp),
-//                horizontalArrangement = Arrangement.spacedBy(10.dp),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Log.d("photos of review", mutableUriList.toString())
-//                items(mutableUriList) {
-//                    AsyncImage(
-//                        modifier = Modifier
-//                            .size(114.dp)
-//                            .clip(RoundedCornerShape(5.dp)),
-//                        model = it,
-//                        contentDescription = null,
-//                        contentScale = ContentScale.Crop
-//                    )
-//                }
-//                item {
-//                    Column(
-//                        modifier = Modifier
-//                                    .width(110.dp)
-//                            .background(color = White, shape = RoundedCornerShape(5.dp))
-//                            .padding(10.dp)
-//                            .clickable(
-//                                indication = null,
-//                                interactionSource = interactionScope
-//                            ) {
-//                                launcher.launch("image/*")
-//                            },
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                        verticalArrangement = Arrangement.spacedBy(10.dp)
-//                    ) {
-//                        Image(
-//                            modifier = Modifier.size(50.dp),
-//                            painter = painterResource(id = R.drawable.add_photo_icon),
-//                            contentDescription = null
-//                        )
-//                        Text(
-//                            text = "Добавьте свои \n" +
-//                                    "фотографии",
-//                            fontSize = 13.sp,
-//                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
-//                            textAlign = TextAlign.Center
-//                        )
-//                    }
-//                }
-//            }
             AppThemeButton(
                 text = "ОТПРАВИТЬ ОТЗЫВ",
                 onClick = onClick

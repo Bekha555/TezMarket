@@ -92,12 +92,18 @@ fun RatingBar(
                         }
                 )
             }
+            if (startRating != 0 && text != "") {
                 Text(
-                    text = if (text.isEmpty()) {"0"} else {"($text)"},
+                    text = if (text.isEmpty()) {
+                        "0"
+                    } else {
+                        "($text)"
+                    },
                     color = Color.Gray,
                     fontSize = 10.sp,
                     modifier = Modifier.padding(start = 2.dp)
                 )
+            }
 
         }
     }
