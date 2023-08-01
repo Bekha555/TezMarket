@@ -393,12 +393,7 @@ fun ProductDetailsScreen(
                     val imageSize = remember { mutableStateOf(IntSize.Zero) }
                     val containerSize = remember { mutableStateOf(IntSize.Zero) }
 
-                    HorizontalPager(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(420.dp),
-                        count = images.size
-                    ) {
+
                     AsyncImage(
                         model = images[selectedImageIndex],
                         contentDescription = null,
@@ -438,7 +433,6 @@ fun ProductDetailsScreen(
                                 imageSize.value = IntSize(it.size.width, it.size.height)
                             }
                     )
-                }
                     IconButton(
                         onClick = { visible = !visible },
                         modifier = Modifier

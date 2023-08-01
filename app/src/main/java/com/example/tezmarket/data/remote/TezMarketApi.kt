@@ -187,7 +187,7 @@ interface TezMarketApi {
     @GET("products")
     @JvmSuppressWildcards
     suspend fun getFilteredProducts(
-        @QueryMap filterData: HashMap<String, Any>
+        @QueryMap filterData: Map<String, Any>
     ): Response<FilteredProducts>
 
     @GET("upload-file")

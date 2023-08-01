@@ -136,7 +136,7 @@ fun CatalogScreen(navController: NavController) {
                 )
                 Filters(onClick = { /*TODO*/ }, grid = {
                     visible = !visible
-                }, filter = { coroutineScope.launch { modalBottomSheetState.show() } })
+                }, filter = { coroutineScope.launch { modalBottomSheetState.show() } }, filterOption = "")
 
                 AnimatedVisibility(
                     visible = visible,

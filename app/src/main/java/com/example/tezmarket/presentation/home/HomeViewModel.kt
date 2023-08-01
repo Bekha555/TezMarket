@@ -1,30 +1,27 @@
 package com.example.tezmarket.presentation.home
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.tezmarket.data.remote.model.advertisements.Advertisements
 import com.example.tezmarket.data.remote.model.banners.BannersData
-import com.example.tezmarket.data.remote.model.discProducts.DiscProducts
-
+import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.Data
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
-import com.example.tezmarket.data.remote.model.products.ProductsData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.repositoryimpl.ProductRepositoryImpl
 import com.example.tezmarket.data.repositoryimpl.ShopsRepositoryImpl
 import com.example.tezmarket.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tj.tcell.tcellexchange.utils.UiState
 import javax.inject.Inject
@@ -49,15 +46,22 @@ class HomeViewModel @Inject constructor(
     var advertisementsUiState by mutableStateOf(UiState<Advertisements>())
         private set
 
-    var filteredProductsUiState by mutableStateOf(UiState<FilteredProducts>())
+    var filteredDataUiState by mutableStateOf(UiState<FilteredProducts>())
         private set
 
-    var filteredDataUiState by mutableStateOf(UiState<FilteredProducts>())
+    var filterUiState by mutableStateOf(UiState<FilterData>())
         private set
 
     fun getHomeData() {
         getAllBanners()
         getAllAdvertisements()
+    }
+
+
+    val _filteredData = mutableStateMapOf<String, Any>()
+
+    fun updateData(key: String, value: Any) {
+        _filteredData[key] = value
     }
 
     private val ITEMS_PER_PAGE = 6
@@ -219,10 +223,36 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getFilteredProducts(filteredData: HashMap<String, Any>){
+    fun getFilteredProducts() {
         viewModelScope.launch {
-            productRepositoryImpl.getFilteredProducts(filteredData).collect{result ->
-                filteredDataUiState = when (result) {
+            productRepositoryImpl.getFilteredProducts(filterData = _filteredData)
+                .collect { result ->
+                    filteredDataUiState = when (result) {
+                        is Resource.Success -> {
+                            UiState(data = result.content)
+                        }
+
+                        is Resource.Loading -> {
+                            UiState(isLoading = true)
+                        }
+
+                        is Resource.Error -> {
+                            UiState(error = result.message)
+                        }
+
+                        is Resource.NetworkError -> {
+                            UiState(unknownError = result.exception.toString())
+                        }
+                    }
+                }
+        }
+    }
+
+
+    fun getFilterData() {
+        viewModelScope.launch {
+            productRepositoryImpl.getFilterData().collect { result ->
+                filterUiState = when (result) {
                     is Resource.Success -> {
                         UiState(data = result.content)
                     }

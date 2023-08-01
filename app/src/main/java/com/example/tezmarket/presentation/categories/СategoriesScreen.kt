@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.tezmarket.navigation.BottomNavigation
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.categories.CategoriesViewModel
 import com.example.tezmarket.presentation.categories.CategoryCard
@@ -47,7 +48,7 @@ fun CategoriesScreen(
             modifier = Modifier,
             lazyListState = LazyListState()
         )
-    }) {
+    }, bottomBar = { BottomNavigation(navController) }) {
         Column {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(categories) { category ->

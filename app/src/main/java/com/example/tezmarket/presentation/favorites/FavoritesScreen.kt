@@ -110,7 +110,7 @@ fun FavoriteScreen(
                 shadow = false,
                 modifier = Modifier
             )
-            Filters(onClick = {}, grid = {}, filter = {})
+            Filters(onClick = {}, grid = {}, filter = {}, filterOption = "")
             if (favoriteProducts.value.isEmpty()) {
                 Box(
                     modifier = Modifier

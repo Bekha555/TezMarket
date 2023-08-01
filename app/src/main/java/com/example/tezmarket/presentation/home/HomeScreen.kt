@@ -5,14 +5,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +26,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.tezmarket.R
 import com.example.tezmarket.navigation.BottomNavigation
+import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.HomeShimmer
 import com.example.tezmarket.ui.common.SaleProduct
 import com.example.tezmarket.ui.common.SaleProductScroll
@@ -46,27 +45,13 @@ fun HomeScreen(
     })
 
     val products = homeViewModel.productItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
-    val discProducts =
-        homeViewModel.discProductItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
+    val discProducts = homeViewModel.discProductItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
     val recProducts = homeViewModel.recProductItems.collectAsLazyPagingItems()
     val shops = homeViewModel.shopsItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
     val banners = homeViewModel.bannersUiState.data?.data ?: emptyList()
     val advertisements = homeViewModel.advertisementsUiState.data?.data ?: emptyList()
 
-    val composition by rememberLottieComposition(
-        RawRes(R.raw.loading_animation)
-    )
     val error by rememberLottieComposition(RawRes(R.raw.no_internet))
-
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever,
-        isPlaying = true,
-        speed = 2f,
-        restartOnPlay = false,
-        cancellationBehavior = LottieCancellationBehavior.Immediately
-    )
-
 
     Column(
         modifier = Modifier
@@ -78,14 +63,6 @@ fun HomeScreen(
         }) { innerPadding ->
             if (homeViewModel.advertisementsUiState.isLoading || homeViewModel.advertisementsUiState.error.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    LottieAnimation(
-                        composition = composition,
-                        progress = progress,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .align(Alignment.Center),
-                        contentScale = ContentScale.Crop
-                    )
                     HomeShimmer()
                 }
             } else {
@@ -153,29 +130,80 @@ fun HomeScreen(
                                 recProducts[it].let {
                                     SaleProduct(
                                         sale_label = "",
-                                        width = 150.dp,
-                                        onClick = { /*TODO*/ },
+                                        width = 160.dp,
+                                        onClick = {
+                                            navController.navigate(
+                                                Screen.ProductDetailsScreen.passProductDetails(
+                                                    it?.id ?: 1
+                                                )
+                                            )
+                                        },
                                         product = it
                                     )
                                 }
                             }
-//                            recProducts.loadState.append.let { loadState ->
-//                                if (loadState is LoadState.Loading) {
-//                                    item {
-//                                        CircularProgressIndicator(
-//                                            modifier = Modifier
-//                                                .fillMaxWidth()
-//                                                .padding(16.dp)
-//                                        )
-//                                    }
-//                                }
-//                            }
+                            item {
+                                recProducts.apply {
+                                    when {
+                                        loadState.refresh is LoadState.Loading -> {
+                                            Box(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                PaginationLoading()
+                                            }
+                                        }
+
+                                        loadState.append is LoadState.Error -> {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(20.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                PaginationLoading()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun PaginationLoading() {
+    val composition by rememberLottieComposition(
+        RawRes(R.raw.purple_loading)
+    )
+
+    val progress by animateLottieCompositionAsState(
+        composition,
+        iterations = LottieConstants.IterateForever,
+        isPlaying = true,
+        speed = 1f,
+        restartOnPlay = false,
+        cancellationBehavior = LottieCancellationBehavior.Immediately
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            composition,
+            progress,
+            modifier = Modifier
+                .size(60.dp)
+                .align(Alignment.Center)
+        )
     }
 }
 

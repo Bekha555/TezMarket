@@ -14,12 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tezmarket.R
@@ -28,7 +26,7 @@ import com.example.tezmarket.ui.theme.Shadow
 
 @Suppress("UNUSED_EXPRESSION")
 @Composable
-fun Filters(onClick: () -> Unit, grid: () -> Unit, filter: () -> Unit) {
+fun Filters(onClick: () -> Unit, grid: () -> Unit, filter: () -> Unit, filterOption: String) {
 
     var selected by remember {
         mutableStateOf(0)
@@ -41,12 +39,10 @@ fun Filters(onClick: () -> Unit, grid: () -> Unit, filter: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .background(Transparent)
+            .background(White)
             .fillMaxWidth()
             .height(70.dp)
             .padding(top = 10.dp)
-
-
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -86,7 +82,7 @@ fun Filters(onClick: () -> Unit, grid: () -> Unit, filter: () -> Unit) {
                                 .padding(end = 3.dp)
                         )
                         Text(
-                            text = "Цена: от низкой к высокой",
+                            text = filterOption.toString(),
                             fontSize = 12.sp,
                             fontFamily = FontFamily(Font(R.font.metropolis_regular))
                         )
@@ -145,9 +141,4 @@ fun ButtonItem(onClick: () -> Unit, text: String) {
 }
 
 
-@Preview
-@Composable
-fun ShowButtons() {
-    Filters(onClick = { /*TODO*/ }, grid = {}, filter = {})
-}
 
