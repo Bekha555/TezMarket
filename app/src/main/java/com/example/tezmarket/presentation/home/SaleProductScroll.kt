@@ -110,6 +110,9 @@ fun <T> SaleProductScroll(
                                         is com.example.tezmarket.data.remote.model.recproducts.Data -> {
                                             item.id ?: 1
                                         }
+                                        is com.example.tezmarket.data.remote.model.discProducts.Data -> {
+                                            item.id ?: 1
+                                        }
 
                                         else -> {
                                             0
