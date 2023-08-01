@@ -104,7 +104,7 @@ fun ProductDetailsScreen(
         if (visible) {
             AppThemeTopBar(
                 navController = navController,
-                title = "Шорты",
+                title = productByIdData?.name ?: "",
                 onClick = {},
                 shadow = false,
                 searchText = searchText,

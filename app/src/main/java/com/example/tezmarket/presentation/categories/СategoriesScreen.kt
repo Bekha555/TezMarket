@@ -38,13 +38,13 @@ fun CategoriesScreen(
     Scaffold(topBar = {
         AppThemeTopBar(
             navController = rememberNavController(),
-            icon = "search",
+            icon = "",
             onClick = {},
             shadow = true,
             title = "Категории",
             searchText = searchText,
             onValueChange = {},
-            backBtn = true,
+            backBtn = false,
             modifier = Modifier,
             lazyListState = LazyListState()
         )
