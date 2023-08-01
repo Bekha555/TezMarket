@@ -48,7 +48,7 @@ fun TopText(text: String, color: Color) {
 
 
 @Composable
-fun AppThemeTopText(text: String, color: Color, shadow: Boolean, modifier: Modifier) {
+fun AppThemeTopText(text: String, color: Color, shadow: Boolean, modifier: Modifier = Modifier) {
     val colorStops = arrayOf(
         0.0f to Shadow,
         1f to Color.Transparent

@@ -1,7 +1,6 @@
 package com.example.tezmarket.presentation.profile
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -80,7 +79,7 @@ fun MyAdvertisementsScreen(
                 navController = navController
             )
         },
-        bottomBar = { AdvertisementBottomBar(onClick = { navController.navigate(Screen.ChooseCategory.route) }) },
+        bottomBar = { FloatingBottomBar(onClick = { navController.navigate(Screen.ChooseCategory.route) }, text = "Добавить") },
         backgroundColor = Background
     ) {
         Column(
@@ -109,7 +108,7 @@ fun MyAdvertisementsScreen(
 
 
 @Composable
-fun AdvertisementBottomBar(onClick: () -> Unit) {
+fun FloatingBottomBar(onClick: () -> Unit, text: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +144,7 @@ fun AdvertisementBottomBar(onClick: () -> Unit) {
                     contentDescription = null
                 )
                 Text(
-                    text = "Добавить",
+                    text = text,
                     color = White,
                     fontSize = 13.sp,
                     fontFamily = FontFamily(Font(R.font.metropolis_regular))
