@@ -1,5 +1,6 @@
 package com.example.tezmarket.presentation.rating
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Checkbox
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -23,11 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tezmarket.R
 import com.example.tezmarket.data.remote.model.productrating.ProductRatingData
+import com.example.tezmarket.ui.theme.Primary
 import com.example.tezmarket.ui.theme.ReviewBarColor
 
 @Composable
-fun RatingSection(productRatingInfo: ProductRatingData) {
+fun RatingSection(productRatingInfo: ProductRatingData, ratingList: List<Int>) {
     var isChecked by remember { mutableStateOf(false) }
+    var a = 0
+    val context = LocalContext.current
     Column() {
         Row(
             modifier = Modifier
@@ -56,16 +61,8 @@ fun RatingSection(productRatingInfo: ProductRatingData) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                for (i in 1..5) {
-                    ///
-                    ///
-                    ///
-                    ///
-                    // have to ask Akai Saidsho for returning me a list or dictionary in reviews(object right now)
-                    ///
-                    ///
-                    ///
-                    ///
+                for (i in ratingList) {
+                    a += 1
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -75,15 +72,19 @@ fun RatingSection(productRatingInfo: ProductRatingData) {
                             modifier = Modifier
                                 .padding(horizontal = 2.dp, vertical = 2.dp)
                                 .size(15.dp),
-                            startRating = i
+                            startRating = a
                         )
-                        ReviewProgressBar(progress = (i / 5.0).toFloat())
+                        ReviewProgressBar(
+                            progress = if (ratingList.sum() == 0) {
+                                0f
+                            } else (i / ratingList.sum()).toFloat()
+                        )
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
                             Text(
-                                text = (i * 2).toString(),
+                                text = i.toString(),
                                 modifier = Modifier.wrapContentWidth(align = Alignment.End)
                             )
                         }
@@ -128,7 +129,7 @@ fun RatingSection(productRatingInfo: ProductRatingData) {
 fun ReviewProgressBar(progress: Float) {
     LinearProgressIndicator(
         progress = progress,
-        color = ReviewBarColor,
+        color = Primary,
         backgroundColor = Color.Transparent,
         modifier = Modifier
             .padding(vertical = 5.dp)
