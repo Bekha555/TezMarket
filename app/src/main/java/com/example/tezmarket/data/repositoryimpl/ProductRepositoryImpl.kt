@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import com.example.tezmarket.data.remote.TezMarketApi
+import com.example.tezmarket.data.remote.model.AdvertisementsPagingSource
 import com.example.tezmarket.data.remote.model.DiscProductsPagingSource
 import com.example.tezmarket.data.remote.model.ProductsByCategoryPagingSource
 import com.example.tezmarket.data.remote.model.ProductsPagingSource
@@ -42,9 +43,8 @@ class ProductRepositoryImpl @Inject constructor(private val tezMarketApi: TezMar
         tezMarketApi.getSimularProducts(productId = productId)
     }
 
-    override suspend fun getAllAdvertisements(): Flow<Resource<Advertisements>> = call {
-        tezMarketApi.getAdvertisements()
-    }
+    override fun getAllAdvertisements(): PagingSource<Int, com.example.tezmarket.data.remote.model.advertisements.Data> =
+        AdvertisementsPagingSource(tezMarketApi)
 
     override fun getRecProducts(): PagingSource<Int, Data> =
         RecProductsPagingSource(tezMarketApi)

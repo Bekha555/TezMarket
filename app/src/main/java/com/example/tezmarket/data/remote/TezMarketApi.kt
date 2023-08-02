@@ -131,7 +131,9 @@ interface TezMarketApi {
 
 
     @GET("main/advertisements")
-    suspend fun getAdvertisements(): Response<Advertisements>
+    suspend fun getAdvertisements(
+        @Query("page") page: Int = 2
+    ): Response<Advertisements>
 
     @GET("profile/delivery-addresses")
     suspend fun getAllAdresses(

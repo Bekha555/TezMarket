@@ -120,6 +120,7 @@ fun ShowAllScreen(
     val shopsItems = homeViewModel.shopsItems.collectAsLazyPagingItems()
     val filteredProducts = homeViewModel.filteredDataUiState.data?.data ?: emptyList()
     val filterData = homeViewModel.filterUiState.data?.get(1)?.data ?: emptyList()
+    val advertisements = homeViewModel.advertisementItems.collectAsLazyPagingItems()
 
 
     val filterDataMap = hashMapOf<String, String>()
@@ -159,6 +160,10 @@ fun ShowAllScreen(
 
                             -3 -> {
                                 "Магазины"
+                            }
+
+                            -4 -> {
+                                "Объявления"
                             }
 
                             else -> {
@@ -305,6 +310,29 @@ fun ShowAllScreen(
                                         }
                                     }
 
+                                    -4 -> {
+                                        gridItems(
+                                            advertisements.itemCount,
+                                            nColumns = 2,
+                                            horizontalArrangement = Arrangement.Center
+                                        ) {
+                                            advertisements[it].let {
+                                                SaleProduct(
+                                                    sale_label = "",
+                                                    width = 160.dp,
+                                                    onClick = {
+                                                        navController.navigate(
+                                                            Screen.ProductDetailsScreen.passProductDetails(
+                                                                it!!.id ?: 1
+                                                            )
+                                                        )
+                                                    },
+                                                    product = it
+                                                )
+                                            }
+                                        }
+                                    }
+
                                     else -> {
                                         gridItems(
                                             productsByCategory.itemCount,
@@ -347,6 +375,18 @@ fun ShowAllScreen(
 
                                     -2 -> {
                                         items(discProducts) {
+                                            SaleProductList(navController, product = it)
+                                        }
+                                    }
+
+                                    -3 -> {
+                                        items(shopsItems) {
+                                            SaleProductList(navController, product = it)
+                                        }
+                                    }
+
+                                    -4 -> {
+                                        items(advertisements) {
                                             SaleProductList(navController, product = it)
                                         }
                                     }

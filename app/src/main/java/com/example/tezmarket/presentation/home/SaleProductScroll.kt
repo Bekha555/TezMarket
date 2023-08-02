@@ -73,6 +73,9 @@ fun <T> SaleProductScroll(
                     is com.example.tezmarket.data.remote.model.shops.Data -> {
                         navController.navigate(Screen.ShowAllScreen.passProductName(-3))
                     }
+                    is com.example.tezmarket.data.remote.model.advertisements.Data -> {
+                        navController.navigate(Screen.ShowAllScreen.passProductName(-4))
+                    }
                 }
             }) {
                 Text(text = "Показать все", fontSize = 11.sp, color = Black)
@@ -111,6 +114,9 @@ fun <T> SaleProductScroll(
                                             item.id ?: 1
                                         }
                                         is com.example.tezmarket.data.remote.model.discProducts.Data -> {
+                                            item.id ?: 1
+                                        }
+                                        is com.example.tezmarket.data.remote.model.advertisements.Data -> {
                                             item.id ?: 1
                                         }
 

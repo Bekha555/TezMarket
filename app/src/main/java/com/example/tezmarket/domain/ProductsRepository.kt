@@ -23,7 +23,7 @@ interface ProductsRepository {
 
     suspend fun getSimularProducts(productId: Int): Flow<Resource<SimularProduct>>
 
-    suspend fun getAllAdvertisements(): Flow<Resource<Advertisements>>
+    fun getAllAdvertisements(): PagingSource<Int, com.example.tezmarket.data.remote.model.advertisements.Data>
 
     fun getRecProducts(): PagingSource<Int, Data>
 

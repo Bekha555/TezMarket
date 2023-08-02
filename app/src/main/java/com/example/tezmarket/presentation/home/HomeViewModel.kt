@@ -43,9 +43,6 @@ class HomeViewModel @Inject constructor(
     var simularProductUiState by mutableStateOf(UiState<SimularProduct>())
         private set
 
-    var advertisementsUiState by mutableStateOf(UiState<Advertisements>())
-        private set
-
     var filteredDataUiState by mutableStateOf(UiState<FilteredProducts>())
         private set
 
@@ -54,7 +51,6 @@ class HomeViewModel @Inject constructor(
 
     fun getHomeData() {
         getAllBanners()
-        getAllAdvertisements()
     }
 
 
@@ -99,6 +95,17 @@ class HomeViewModel @Inject constructor(
         ),
         pagingSourceFactory = {
             productRepositoryImpl.getDiscProducts()
+        },
+    ).flow.cachedIn(viewModelScope)
+
+    val advertisementItems = Pager(
+        config = PagingConfig(
+        pageSize = ITEMS_PER_PAGE,
+        prefetchDistance = PREFETCH_DISTANCE,
+        enablePlaceholders = false
+    ),
+        pagingSourceFactory = {
+            productRepositoryImpl.getAllAdvertisements()
         },
     ).flow.cachedIn(viewModelScope)
 
@@ -199,29 +206,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllAdvertisements() {
-        viewModelScope.launch {
-            productRepositoryImpl.getAllAdvertisements().collect { result ->
-                advertisementsUiState = when (result) {
-                    is Resource.Success -> {
-                        UiState(data = result.content)
-                    }
-
-                    is Resource.Loading -> {
-                        UiState(isLoading = true)
-                    }
-
-                    is Resource.Error -> {
-                        UiState(error = result.message)
-                    }
-
-                    is Resource.NetworkError -> {
-                        UiState(unknownError = result.exception.toString())
-                    }
-                }
-            }
-        }
-    }
 
     fun getFilteredProducts() {
         viewModelScope.launch {

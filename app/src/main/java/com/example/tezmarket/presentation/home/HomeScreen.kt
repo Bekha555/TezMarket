@@ -49,7 +49,7 @@ fun HomeScreen(
     val recProducts = homeViewModel.recProductItems.collectAsLazyPagingItems()
     val shops = homeViewModel.shopsItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
     val banners = homeViewModel.bannersUiState.data?.data ?: emptyList()
-    val advertisements = homeViewModel.advertisementsUiState.data?.data ?: emptyList()
+    val advertisements = homeViewModel.advertisementItems.collectAsLazyPagingItems().itemSnapshotList.take(6)
 
     val error by rememberLottieComposition(RawRes(R.raw.no_internet))
 
@@ -61,7 +61,7 @@ fun HomeScreen(
         Scaffold(bottomBar = {
             BottomNavigation(navController = navController)
         }) { innerPadding ->
-            if (homeViewModel.advertisementsUiState.isLoading || homeViewModel.advertisementsUiState.error.isNotEmpty()) {
+            if (homeViewModel.bannersUiState.isLoading || homeViewModel.bannersUiState.error.isNotEmpty()) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     HomeShimmer()
                 }
