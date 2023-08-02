@@ -76,7 +76,6 @@ fun Product(brush: Brush) {
                 modifier = Modifier
                     .height(420.dp)
                     .fillMaxWidth()
-                    .padding(end = 5.dp)
                     .background(brush)
             )
 

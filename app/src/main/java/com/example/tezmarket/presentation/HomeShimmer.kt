@@ -182,6 +182,7 @@ fun Home(brush: Brush) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .horizontalScroll(state = rememberScrollState())
                 //.padding(horizontal = 25.dp)
 
         ) {
@@ -244,7 +245,7 @@ fun Home(brush: Brush) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                //.padding(horizontal = 25.dp)
+                .padding(bottom = 40.dp)
                 .horizontalScroll(state = rememberScrollState())
         ) {
             repeat(4) {

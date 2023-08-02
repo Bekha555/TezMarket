@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -120,12 +119,7 @@ fun ProductDetailsScreen(
             Box(
                 modifier = Modifier
                     .background(White)
-                    .height(100.dp)
-                    .shadow(
-                        1.dp,
-                        shape = RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp),
-                        clip = true
-                    ),
+                    .height(100.dp),
                 contentAlignment = Alignment.Center
             ) {
                 AppThemeButton(
@@ -154,11 +148,13 @@ fun ProductDetailsScreen(
                         durationMillis = 300,
                         easing = FastOutSlowInEasing
                     )
-                )) {
+                )
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Background)
+                        .padding(it)
                         .verticalScroll(rememberScrollState())
                 ) {
                     HorizontalPager(
@@ -172,6 +168,7 @@ fun ProductDetailsScreen(
                             model = imageUrl,
                             contentScale = ContentScale.Crop,
                             contentDescription = null,
+                            onLoading = {},
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clickable(onClick = {
@@ -181,12 +178,13 @@ fun ProductDetailsScreen(
                         )
                     }
                     Column(
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+                        modifier = Modifier.padding(vertical = 10.dp)
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 10.dp),
+                                .padding(bottom = 10.dp)
+                                .padding(horizontal = 10.dp),
                             horizontalArrangement = Arrangement.End
                         ) {
                             IconButton(
@@ -208,7 +206,7 @@ fun ProductDetailsScreen(
                             ) {
                                 Image(
                                     painter = painterResource(
-                                        id = if (selected == 0) {
+                                        id = if (selected == 0 && productByIdData?.isFavorite == false) {
                                             R.drawable.heart_icon
                                         } else {
                                             R.drawable.filled_heart_icon
@@ -221,7 +219,7 @@ fun ProductDetailsScreen(
                             }
                         }
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
@@ -239,10 +237,11 @@ fun ProductDetailsScreen(
                             text = "${productByIdData?.category?.name}",
                             fontFamily = FontFamily(Font(R.font.metropolis_regular)),
                             fontSize = 12.sp,
-                            color = Gray
+                            color = Gray,
+                            modifier = Modifier.padding(horizontal = 10.dp)
                         )
                         Row(
-                            modifier = Modifier.padding(top = 5.dp),
+                            modifier = Modifier.padding(top = 5.dp).padding(horizontal = 10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             productByIdData?.avgRating?.let {
@@ -265,7 +264,7 @@ fun ProductDetailsScreen(
                         }
 
                         Text(
-                            modifier = Modifier.padding(vertical = 25.dp),
+                            modifier = Modifier.padding(vertical = 25.dp, horizontal = 10.dp),
                             text = "${productByIdData?.desc}",
                             fontFamily = FontFamily(Font(R.font.metropolis_regular))
                         )
@@ -294,7 +293,7 @@ fun ProductDetailsScreen(
                                 text = "Отзывы",
                                 fontSize = 16.sp,
                                 modifier = Modifier
-                                    .padding(start = 20.dp)
+                                    .padding(start = 10.dp)
                                     .padding(vertical = 10.dp)
                                     .align(Alignment.CenterStart)
                             )
@@ -302,7 +301,7 @@ fun ProductDetailsScreen(
                                 painter = painterResource(id = R.drawable.profile_item_button),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .padding(end = 20.dp)
+                                    .padding(end = 10.dp)
                                     .size(10.dp)
                                     .align(
                                         Alignment.CenterEnd
@@ -341,25 +340,27 @@ fun ProductDetailsScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 150.dp)
+                                .padding(top = 10.dp)
                                 .horizontalScroll(
                                     rememberScrollState()
                                 ),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             for (product in similarProducts) {
-                                SaleProduct(
-                                    sale_label = "new",
-                                    width = 150.dp,
-                                    onClick = {
-                                        navController.navigate(
-                                            Screen.ProductDetailsScreen.passProductDetails(
-                                                product.id!!
+                                Box(modifier = Modifier.padding(start = 10.dp)) {
+                                    SaleProduct(
+                                        sale_label = "new",
+                                        width = 150.dp,
+                                        onClick = {
+                                            navController.navigate(
+                                                Screen.ProductDetailsScreen.passProductDetails(
+                                                    product.id!!
+                                                )
                                             )
-                                        )
-                                    },
-                                    product = product
-                                )
+                                        },
+                                        product = product
+                                    )
+                                }
                             }
                         }
                     }

@@ -45,6 +45,7 @@ fun <T> SaleProduct(
     sale_label: String,
     width: Dp,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     favoritesViewModel: FavoritesViewModel = hiltViewModel(),
     cartViewModel: CartViewModel = hiltViewModel(),
     product: T
