@@ -1,11 +1,13 @@
 package com.example.tezmarket.data.remote
 
+import com.example.tezmarket.data.remote.model.AttributesByCategory.AttributesById
 import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
 import com.example.tezmarket.data.remote.model.addcart.AddCartProduct
 import com.example.tezmarket.data.remote.model.adress.AddAdress
 import com.example.tezmarket.data.remote.model.adress.AdressById
 import com.example.tezmarket.data.remote.model.adress.AdressesData
 import com.example.tezmarket.data.remote.model.adress.UpdateAdress
+import com.example.tezmarket.data.remote.model.advertisementbyid.AdvertisementById
 import com.example.tezmarket.data.remote.model.advertisements.Advertisements
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.cart.Cart
@@ -61,6 +63,11 @@ interface TezMarketApi {
     suspend fun getProductById(
         @Path("product_id") productId: Int
     ): Response<ProductById>
+
+    @GET("advertisements/{advertisement_id}")
+    suspend fun getAdvertisementById(
+        @Path("advertisement_id") advertisement_id: Int
+    ): Response<AdvertisementById>
 
 
     @GET("discounted-products")
@@ -196,6 +203,11 @@ interface TezMarketApi {
     suspend fun uploadFile(
         @Query("file") files: File
     ): Response<UploadFiles>
+
+    @GET("attributes/{category_id}")
+    suspend fun getAttributesById(
+        @Path("category_id") category_id: Int
+    ): Response<AttributesById>
 
 
     companion object Constants {

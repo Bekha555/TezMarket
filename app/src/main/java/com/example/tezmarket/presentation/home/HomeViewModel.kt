@@ -10,7 +10,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.tezmarket.data.remote.model.advertisements.Advertisements
+import com.example.tezmarket.data.remote.model.advertisementbyid.AdvertisementById
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
@@ -39,6 +39,8 @@ class HomeViewModel @Inject constructor(
 
     var productByIdUiState by mutableStateOf(UiState<ProductById>())
         private set
+
+    var advertisementByIduiState by mutableStateOf(UiState<AdvertisementById>())
 
     var simularProductUiState by mutableStateOf(UiState<SimularProduct>())
         private set
@@ -181,8 +183,32 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getAdvertisementById(advertisement_id: Int) {
+        viewModelScope.launch {
+            productRepositoryImpl.getAdvertisementById(advertisement_id).collect { result ->
+                advertisementByIduiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
 
-    fun getSimularProducts(productId: Int) {
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun getSimularProducts(productId: Int) {2
         viewModelScope.launch {
             productRepositoryImpl.getSimularProducts(productId = productId).collect { result ->
                 simularProductUiState = when (result) {

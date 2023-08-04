@@ -121,7 +121,7 @@ fun AddressAddScreen(
                         zipCode = index.text.toInt()
                     )
                 }
-//                navController.navigate(Screen.AdressesScreen.route)
+                navController.navigate(Screen.AdressesScreen.route)
             }
         }
     }

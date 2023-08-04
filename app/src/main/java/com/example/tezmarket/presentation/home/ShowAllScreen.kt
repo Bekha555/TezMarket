@@ -106,11 +106,11 @@ fun ShowAllScreen(
 
     val categoriesList = categoriesViewModel.categoriesUiState.data?.data ?: emptyList()
     if (categoriesList.isNotEmpty() && productName > 0) {
-        Toast.makeText(
-            context,
-            "product Name ${productName - 1}, category name ${categoriesList.get(productName - 1).name}",
-            Toast.LENGTH_SHORT
-        ).show()
+//        Toast.makeText(
+//            context,
+//            "product Name ${productName - 1}, category name ${categoriesList.get(productName - 1).name}",
+//            Toast.LENGTH_SHORT
+//        ).show()
         categoryName = categoriesList[productName - 1].name.toString()
     }
 
@@ -192,8 +192,8 @@ fun ShowAllScreen(
                         onClick = { },
                         grid = {
                             visible = !visible
-                            Toast.makeText(context, "grid icon is pressed", Toast.LENGTH_SHORT)
-                                .show()
+//                            Toast.makeText(context, "grid icon is pressed", Toast.LENGTH_SHORT)
+//                                .show()
                         },
                         filter = {
                             coroutineScope.launch { modalBottomSheetState.show() }
@@ -205,12 +205,12 @@ fun ShowAllScreen(
                             modifier = Modifier.fillMaxSize(),
                         ) {
                             if (search.value.text.isNotEmpty() || filterOption != "По умолчанию") {
-                                Toast.makeText(
-                                    context,
-                                    filteredProducts.toString(),
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
+//                                Toast.makeText(
+//                                    context,
+//                                    filteredProducts.toString(),
+//                                    Toast.LENGTH_SHORT
+//                                )
+//                                    .show()
                                 if (homeViewModel.filteredDataUiState.isLoading) {
                                     item {
                                         PaginationLoading()
@@ -416,7 +416,7 @@ fun FilterBottomSheet(
 ) {
     val localFocusManager = LocalFocusManager.current
     Box(modifier = Modifier
-        .height(350.dp)
+        .height(360.dp)
         .fillMaxWidth()
         .pointerInput(Unit) {
             detectTapGestures(onTap = {
@@ -444,7 +444,7 @@ fun FilterBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 10.dp)
+                .padding(top = 10.dp, bottom = 10.dp)
         ) {
             item {
                 Sorting(options, optionSelected = { optionSelected(it) }, categoryId = categoryId)
@@ -477,7 +477,7 @@ fun Sorting(
                             if (categoryId >= 0) {
                                 homeViewModel.updateData("category_id", categoryId - 1)
                             }
-                            if (selectedOption != option.key && option.key != "По умолчанию") {
+                            if (option.key != "По умолчанию") {
                                 homeViewModel.updateData("sort", option.value)
                             } else if (option.key == "По умолчанию") {
                                 homeViewModel._filteredData.remove("sort")

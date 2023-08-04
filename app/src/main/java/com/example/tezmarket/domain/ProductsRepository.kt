@@ -2,7 +2,7 @@ package com.example.tezmarket.domain
 
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
-import com.example.tezmarket.data.remote.model.advertisements.Advertisements
+import com.example.tezmarket.data.remote.model.advertisementbyid.AdvertisementById
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
@@ -18,6 +18,8 @@ interface ProductsRepository {
     suspend fun getAllBanners(): Flow<Resource<BannersData>>
 
     suspend fun getProductById(productId: Int): Flow<Resource<ProductById>>
+
+    suspend fun getAdvertisementById(advertisement_id: Int): Flow<Resource<AdvertisementById>>
   
     fun getDiscProducts(): PagingSource<Int, com.example.tezmarket.data.remote.model.discProducts.Data>
 

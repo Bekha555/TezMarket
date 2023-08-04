@@ -62,7 +62,7 @@ fun ChooseCategory(navController: NavController, categoriesViewModel: Categories
             )
 //            Spacer(modifier = Modifier.height(50.dp))
             for (items in categories) {
-                CategoryCard(category = items, modifier = Modifier.clickable(onClick = {navController.navigate(Screen.ChooseAttributs.route)}))
+                CategoryCard(category = items, modifier = Modifier.clickable(onClick = {navController.navigate(Screen.ChooseAttributs.passCategoryId(categoryId = items.id ?: 1))}))
             }
 
 

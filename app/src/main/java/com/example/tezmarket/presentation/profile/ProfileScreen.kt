@@ -67,7 +67,7 @@ fun ProfileScreen(
                 title = "Мои объявления",
                 subtitle = "4 объявления",
                 onClick = { navController.navigate(Screen.MyAdvertisementsScreen.route) })
-            ProfileItem(title = "Адреса доставки", subtitle = "3 адреса", onClick = {})
+            ProfileItem(title = "Адреса доставки", subtitle = "3 адреса", onClick = {navController.navigate(Screen.AdressesScreen.route)})
             ProfileItem(title = "Способы оплаты", subtitle = "Visa  **34", onClick = {})
             ProfileItem(
                 title = "Промокоды",

@@ -5,9 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tezmarket.data.remote.model.addadvertisement.AddAdvertisement
-import com.example.tezmarket.data.remote.model.categories.Categories
-import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
+import com.example.tezmarket.data.remote.model.AttributesByCategory.AttributesById
 import com.example.tezmarket.data.remote.model.user.UserData
 import com.example.tezmarket.data.repositoryimpl.ProfileRepositoryImpl
 import com.example.tezmarket.utils.Resource
@@ -18,10 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(private val profileRepositoryImpl: ProfileRepositoryImpl) :
-    ViewModel(){
+    ViewModel() {
 
     var userUiState by mutableStateOf(UiState<UserData>())
         private set
+    var attributesById by mutableStateOf(UiState<AttributesById>())
 
 
     init {
@@ -52,4 +51,29 @@ class ProfileViewModel @Inject constructor(private val profileRepositoryImpl: Pr
             }
         }
     }
+
+    fun getAttributesById(attributesId: Int) {
+        viewModelScope.launch {
+            profileRepositoryImpl.getAttributesById(attributesId).collect { result ->
+                attributesById = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
     }
+
+}

@@ -79,6 +79,7 @@ fun ProductDetailsScreen(
         Log.d("debug", productId.toString())
         homeViewModel.getProductById(productId = productId)
         homeViewModel.getSimularProducts(productId = productId)
+        homeViewModel.getAdvertisementById(advertisement_id = productId)
     })
 
     var searchText = remember {
@@ -135,6 +136,7 @@ fun ProductDetailsScreen(
         if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isNotEmpty()) {
             ProductShimmer()
         } else {
+
             AnimatedVisibility(
                 visible = visible,
                 enter = fadeIn(
@@ -366,6 +368,11 @@ fun ProductDetailsScreen(
                     }
                 }
             }
+
+
+
+
+
             AnimatedVisibility(
 
                 visible = !visible,

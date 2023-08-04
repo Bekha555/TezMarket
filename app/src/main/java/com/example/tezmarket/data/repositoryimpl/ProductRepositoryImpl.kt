@@ -10,7 +10,7 @@ import com.example.tezmarket.data.remote.model.DiscProductsPagingSource
 import com.example.tezmarket.data.remote.model.ProductsByCategoryPagingSource
 import com.example.tezmarket.data.remote.model.ProductsPagingSource
 import com.example.tezmarket.data.remote.model.RecProductsPagingSource
-import com.example.tezmarket.data.remote.model.advertisements.Advertisements
+import com.example.tezmarket.data.remote.model.advertisementbyid.AdvertisementById
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
@@ -34,6 +34,10 @@ class ProductRepositoryImpl @Inject constructor(private val tezMarketApi: TezMar
 
     override suspend fun getProductById(productId: Int): Flow<Resource<ProductById>> = call {
         tezMarketApi.getProductById(productId = productId)
+    }
+
+    override suspend fun getAdvertisementById(advertisement_id: Int): Flow<Resource<AdvertisementById>> = call {
+        tezMarketApi.getAdvertisementById(advertisement_id = advertisement_id)
     }
 
     override fun getDiscProducts(): PagingSource<Int, com.example.tezmarket.data.remote.model.discProducts.Data> =

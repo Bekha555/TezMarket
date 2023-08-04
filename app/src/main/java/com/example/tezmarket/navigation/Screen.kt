@@ -45,7 +45,11 @@ sealed class Screen(val route: String) {
     object MyAdvertisementsScreen : Screen("my_advertisements_screen")
     object AddAdvertisementScreen : Screen("add_advertisement_screen")
     object ChooseCategory : Screen("choose_category")
-    object ChooseAttributs : Screen("choose_attributs")
+    object ChooseAttributs : Screen("choose_attributs?category_id={category_id}"){
+        fun passCategoryId(categoryId: Int): String {
+            return "choose_attributs?category_id=$categoryId"
+        }
+    }
 
 
 

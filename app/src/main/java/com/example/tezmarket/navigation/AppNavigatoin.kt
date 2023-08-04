@@ -21,6 +21,8 @@ import com.example.tezmarket.presentation.home.HomeScreen
 import com.example.tezmarket.presentation.home.ShowAllScreen
 import com.example.tezmarket.presentation.product.ProductDetailsScreen
 import com.example.tezmarket.presentation.profile.AddAdvertisementScreen
+import com.example.tezmarket.presentation.profile.AddressAddScreen
+import com.example.tezmarket.presentation.profile.Addresses
 import com.example.tezmarket.presentation.profile.ChooseAttributs
 import com.example.tezmarket.presentation.profile.ChooseCategory
 import com.example.tezmarket.presentation.profile.MyAdvertisementsScreen
@@ -98,6 +100,12 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             ShowAllScreen(navController, productName = it.arguments!!.getInt("productName"))
         }
+        composable(route = Screen.AdressesScreen.route) {
+            Addresses(navController)
+        }
+        composable(route = Screen.AddressAddScreen.route, arguments = listOf(navArgument(name = "adress_id"){type = NavType.IntType})) {
+            AddressAddScreen(navController, adressId = it.arguments!!.getInt("adress_id"))
+        }
         composable(route = Screen.MyAdvertisementsScreen.route) {
             MyAdvertisementsScreen(navController)
         }
@@ -107,8 +115,8 @@ fun AppNavigation(navController: NavHostController) {
         composable(route = Screen.ChooseCategory.route) {
             ChooseCategory(navController)
         }
-        composable(route = Screen.ChooseAttributs.route) {
-            ChooseAttributs(navController)
+        composable(route = Screen.ChooseAttributs.route, arguments = listOf(navArgument(name = "category_id"){type = NavType.IntType})) {
+            ChooseAttributs(categoryId = it.arguments!!.getInt("category_id"), navController)
         }
     }
 

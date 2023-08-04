@@ -20,6 +20,7 @@ import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +34,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tezmarket.R
+import com.example.tezmarket.data.remote.model.AttributesByCategory.Data
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeTopBar
@@ -44,10 +47,20 @@ import com.example.tezmarket.ui.theme.Primary
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
-fun ChooseAttributs(navController: NavController) {
+fun ChooseAttributs(
+    categoryId: Int = 0,
+    navController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
+    LaunchedEffect(key1 = Unit, block = {
+        profileViewModel.getAttributesById(categoryId)
+    })
+
+    val atributes = profileViewModel.attributesById.data?.data
+    var selectedAttr = listOf<SelectableitemModel>()
 
     Scaffold(
         topBar = {
@@ -73,7 +86,9 @@ fun ChooseAttributs(navController: NavController) {
         )
         {
 
-            CheckAttr()
+            CheckAttr(atributes = atributes ?: emptyList()) {
+                selectedAttr = it
+            }
         }
     }
 }
@@ -84,15 +99,18 @@ private val list = mutableStateListOf<SelectableitemModel>()
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun CheckAttr() {
+fun CheckAttr(atributes: List<Data>, selectedAttr: (List<SelectableitemModel>) -> Unit) {
+
+
     ContentView(list = list)
 
     list.clear()
     val tempList = mutableListOf<SelectableitemModel>()
-    for (i in 1 until 20) {
-        tempList.add(SelectableitemModel("Content $i", mutableStateOf(false)))
+    for (item in atributes) {
+        tempList.add(SelectableitemModel(item.name?.ru.toString(), mutableStateOf(false)))
     }
     list.addAll(tempList)
+    selectedAttr(list)
 }
 
 @Composable
