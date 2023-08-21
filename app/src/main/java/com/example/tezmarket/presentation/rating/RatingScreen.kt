@@ -81,7 +81,7 @@ fun RatingScreen(
     ratingList.add(ratingOfFive?.x3 ?: 0)
     ratingList.add(ratingOfFive?.x4 ?: 0)
     ratingList.add(ratingOfFive?.x5 ?: 0)
-    Log.e("ratings yusuf", ratingOfFive.toString())
+    Log.e("Rating", ratingOfFive.toString())
 
 
     ModalBottomSheetLayout(
@@ -121,7 +121,7 @@ fun RatingScreen(
                 RatingScreenBottomBar(onClick = {
                     coroutineScope.launch { modalBottomSheetState.show() }
                 })
-            }) {
+            }, backgroundColor = Transparent) {
 
             LazyColumn(
                 modifier = Modifier
@@ -131,7 +131,7 @@ fun RatingScreen(
                 item {
                     AppThemeTopText(
                         text = "Рейтинг и обзоры",
-                        color = White,
+                        color = Transparent,
                         shadow = false,
                         modifier = Modifier
                     )

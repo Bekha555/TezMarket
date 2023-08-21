@@ -7,9 +7,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Status(
     @Json(name = "color")
-    val color: String = "",
+    val color: String? = "",
     @Json(name = "id")
-    val id: Int = 0,
+    val id: Int? = 0,
     @Json(name = "name")
-    val name: String = ""
+    val name: String? = ""
 )

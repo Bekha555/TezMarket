@@ -7,11 +7,11 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Category(
     @Json(name = "id")
-    val id: Int = 0,
+    val id: Int? = 0,
     @Json(name = "image")
-    val image: String = "",
+    val image: String? = "",
     @Json(name = "parent_id")
-    val parentId: Any = Any(),
+    val parentId: Any? = Any(),
     @Json(name = "title")
-    val title: String = ""
+    val title: String? = ""
 )

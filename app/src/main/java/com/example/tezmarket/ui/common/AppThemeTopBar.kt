@@ -65,6 +65,7 @@ fun TopBar(
     searchText: MutableState<TextFieldValue>,
     onValueChange: (TextFieldValue) -> Unit,
     onClick: () -> Unit,
+    color: Color = Transparent,
     navController: NavController
 ) {
     val showSearchField = remember { mutableStateOf(false) }
@@ -75,20 +76,21 @@ fun TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(color = Transparent)
+            .background(color = color)
     ) {
         Crossfade(
             targetState = showSearchField.value,
             animationSpec = tween(easing = EaseInOut)
         ) { targetState ->
             if (!targetState) {
-                Row(
+                Box(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+//                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     if (backBtn) {
                         IconButton(
-                            onClick = { navController.navigateUp() }
+                            onClick = { navController.navigateUp() }, modifier = Modifier.align(
+                                Alignment.CenterStart)
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.back_button_icon),
@@ -104,7 +106,7 @@ fun TopBar(
                         text = title,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        modifier = Modifier.align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.Center)
                     )
 
                     IconButton(
@@ -114,7 +116,8 @@ fun TopBar(
                             } else {
                                 onClick()
                             }
-                        }
+                        },
+                        modifier = Modifier.align(Alignment.CenterEnd)
                     ) {
                         if (icon.isNotEmpty()) {
                             Icon(
@@ -189,6 +192,7 @@ fun AppThemeTopBar(
     searchText: MutableState<TextFieldValue>,
     onValueChange: (TextFieldValue) -> Unit,
     onClick: () -> Unit,
+    color: Color = Transparent ,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     navController: NavController
@@ -206,6 +210,7 @@ fun AppThemeTopBar(
             searchText = searchText,
             onValueChange = onValueChange,
             onClick = onClick,
+            color = color,
             navController = navController
         )
         if (shadow)

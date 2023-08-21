@@ -7,15 +7,15 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class Client(
     @Json(name = "avatar")
-    val avatar: Any = Any(),
+    val avatar: Any? = Any(),
     @Json(name = "id")
-    val id: Int = 0,
+    val id: Int? = 0,
     @Json(name = "is_agree")
-    val isAgree: Boolean = false,
+    val isAgree: Boolean? = false,
     @Json(name = "name")
-    val name: String = "",
+    val name: String? = "",
     @Json(name = "phone")
-    val phone: String = "",
+    val phone: String? = "",
     @Json(name = "subscriber_id")
-    val subscriberId: Int = 0
+    val subscriberId: Int? = 0
 )

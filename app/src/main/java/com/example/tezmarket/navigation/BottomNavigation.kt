@@ -19,10 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tezmarket.R
@@ -59,7 +61,11 @@ fun BottomNavigation(
                     ,
                     icon = {
                         Icon(
-                            painter = painterResource(id = screen.icon),
+                            painter = painterResource(
+                                id = if (currentRoute == screen.route) {
+                                    screen.selected_icon
+                                } else screen.icon
+                            ),
                             modifier = Modifier
                                 .size(26.dp),
                             contentDescription = null
@@ -72,7 +78,9 @@ fun BottomNavigation(
                             fontFamily = FontFamily(
                                 Font(R.font.metropolis_regular)
                             ),
-                            fontWeight = FontWeight.Light
+                            fontWeight = FontWeight.Light,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     },
                     selected = currentRoute == screen.route,
@@ -81,13 +89,7 @@ fun BottomNavigation(
                     alwaysShowLabel = true,
                     onClick = {
                         navController.navigate(screen.route) {
-//                            popUpTo(navController.graph.findStartDestination().id)
-//                            {
-//                                saveState = true
-//                            }
                             launchSingleTop = true
-
-//
                             restoreState = false
                         }
                     }
@@ -95,6 +97,7 @@ fun BottomNavigation(
             }
         }
     }
+
 }
 
 

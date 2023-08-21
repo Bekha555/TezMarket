@@ -95,6 +95,9 @@ fun ProductDetailsScreen(
     var selected by remember {
         mutableStateOf(if (productByIdData?.isFavorite == true) 1 else 0)
     }
+    var inCart by remember {
+        mutableStateOf(if (productByIdData?.addedToCart == true) 1 else 0)
+    }
     var visible by remember {
         mutableStateOf(true)
     }
@@ -124,9 +127,16 @@ fun ProductDetailsScreen(
                 contentAlignment = Alignment.Center
             ) {
                 AppThemeButton(
-                    text = "Добавить в корзину",
+                    text = if (productByIdData?.addedToCart == false && inCart == 0) {
+                        "Добавить в корзину"
+                    } else {
+                        "Товар уже в корзине"
+                    },
                     onClick = {
-                        cartViewModel.addCartProduct(productId = productId, productQuantity = 1)
+                        if (productByIdData?.addedToCart == false && inCart == 0) {
+                            cartViewModel.addCartProduct(productId = productId, productQuantity = 1)
+                            inCart = 1
+                        }
                     })
             }
         }
@@ -221,7 +231,9 @@ fun ProductDetailsScreen(
                             }
                         }
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
@@ -243,7 +255,9 @@ fun ProductDetailsScreen(
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                         Row(
-                            modifier = Modifier.padding(top = 5.dp).padding(horizontal = 10.dp),
+                            modifier = Modifier
+                                .padding(top = 5.dp)
+                                .padding(horizontal = 10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             productByIdData?.avgRating?.let {

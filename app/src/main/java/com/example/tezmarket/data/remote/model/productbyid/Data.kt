@@ -26,6 +26,8 @@ data class Data(
     val images: List<String>? = listOf(),
     @Json(name = "isFavorite")
     val isFavorite: Boolean? = false,
+    @Json(name = "addedToCart")
+    val addedToCart: Boolean? = false,
     @Json(name = "name")
     val name: String? = "",
     @Json(name = "percentageDiscount")

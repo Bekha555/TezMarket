@@ -196,59 +196,16 @@ fun CartScreen(
                 )
             },
             bottomBar = {
-                Column {
-                    if (carts.value.isNotEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp)
-                                .shadow(elevation = 1.5.dp, shape = RoundedCornerShape(8.dp))
-                                .background(color = White, shape = RoundedCornerShape(8.dp))
-                                .requiredHeight(52.dp)
-                                .clickable(onClick = { coroutineScope.launch { modalBottomSheetState.show() } })
-
-                        )
-                        {
-                            Text(
-                                text = "Введите ваш промокод", color = Gray, modifier = Modifier
-                                    .align(
-                                        Alignment.CenterStart
-                                    )
-                                    .padding(start = 25.dp)
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp)
-                                .padding(vertical = 20.dp)
-
-                        ) {
-                            Text(
-                                text = "Общая сумма:",
-                                color = Gray,
-                                fontSize = 14.sp,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-
-                            )
-                            Text(
-                                text = "423TJS",
-                                color = Black,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                            )
-                        }
-                    }
+                Column{
+                if (carts.value.isNotEmpty()) {
                     AppThemeButton(text = "ПРОВЕРИТЬ") {
                         navController.navigate(Screen.CartCheckout.route)
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    BottomNavigation(navController = navController)
                 }
-            },
+                    Spacer(modifier = Modifier.height(10.dp))
+                BottomNavigation(navController = navController)
+            }
+    },
             backgroundColor = Background
         )
         { innerPadding ->
@@ -261,9 +218,10 @@ fun CartScreen(
                             textAlign = TextAlign.Center,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.align(
-                                Alignment.Center
-                            )
+                            modifier = Modifier
+                                .align(
+                                    Alignment.Center
+                                )
                                 .padding(horizontal = 20.dp)
                         )
                     }
@@ -287,6 +245,61 @@ fun CartScreen(
                     items(carts.value){
                         CartSaleProduct(navController = navController, data = it)
                     }
+                    item{
+                        Column {
+                            if (carts.value.isNotEmpty()) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp)
+                                        .padding(top = 10.dp)
+                                        .shadow(
+                                            elevation = 1.5.dp,
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .background(color = White, shape = RoundedCornerShape(8.dp))
+                                        .requiredHeight(52.dp)
+                                        .clickable(onClick = { coroutineScope.launch { modalBottomSheetState.show() } })
+
+                                )
+                                {
+                                    Text(
+                                        text = "Введите ваш промокод", color = Gray, modifier = Modifier
+                                            .align(
+                                                Alignment.CenterStart
+                                            )
+                                            .padding(start = 25.dp)
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 25.dp)
+                                        .padding(top = 10.dp)
+
+                                ) {
+                                    Text(
+                                        text = "Общая сумма:",
+                                        color = Gray,
+                                        fontSize = 14.sp,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+
+                                    )
+                                    Text(
+                                        text = "423TJS",
+                                        color = Black,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        modifier = Modifier.align(Alignment.CenterEnd)
+                                    )
+                                }
+                            }
+
+                        }
+                    }
+
                 }
 
             }
