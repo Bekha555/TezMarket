@@ -120,6 +120,7 @@ fun ProductDetailsScreen(
         }
     }, bottomBar = {
         if (visible) {
+            if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isEmpty()) {
             Box(
                 modifier = Modifier
                     .background(White)
@@ -139,6 +140,7 @@ fun ProductDetailsScreen(
                         }
                     })
             }
+        }
         }
     }) {
 

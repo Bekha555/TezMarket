@@ -2,6 +2,7 @@ package com.example.tezmarket.presentation.auth
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -50,6 +51,7 @@ import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -94,6 +96,7 @@ fun CartScreen(
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
     LaunchedEffect(key1 = Unit, block = {
         cartViewModel.getAllCart()
         Log.e("debug", "screen is reloaded successfully")
@@ -118,7 +121,6 @@ fun CartScreen(
         restartOnPlay = false,
         cancellationBehavior = LottieCancellationBehavior.Immediately
     )
-
     var visible by remember {
         mutableStateOf(true)
     }
@@ -128,6 +130,12 @@ fun CartScreen(
     if (lazyListState.firstVisibleItemIndex == 0) {
         visible = true
     }
+    var promocode by remember {
+        mutableStateOf(TextFieldValue(""))
+    }
+
+    var sum = 0.0
+    for (items in carts.value){sum += items.price!!.toDouble() * items.quantity!!}
 
 
     ModalBottomSheetLayout(sheetState = modalBottomSheetState,
@@ -156,7 +164,8 @@ fun CartScreen(
                         .fillMaxWidth()
                         .padding(top = 52.dp)
                 ) {
-                    CartTextField { }
+                    CartTextField(value = promocode, onValueChange = {promocode = it}, onClick = {if (promocode.text.isEmpty()){
+                        Toast.makeText(context, "Введите промокод или выберите добавленные", Toast.LENGTH_SHORT).show()} })
 
                     Text(
                         text = "Ваши промокоды",
@@ -186,7 +195,7 @@ fun CartScreen(
                     },
                     backBtn = false,
                     shadow = false,
-                    icon = "search",
+                    icon = "",
                     searchText = searchText,
                     onValueChange = {},
                     onClick = { /*TODO*/ },
@@ -196,21 +205,21 @@ fun CartScreen(
                 )
             },
             bottomBar = {
-                Column{
-                if (carts.value.isNotEmpty()) {
-                    AppThemeButton(text = "ПРОВЕРИТЬ") {
-                        navController.navigate(Screen.CartCheckout.route)
+                Column {
+                    if (carts.value.isNotEmpty()) {
+                        AppThemeButton(text = "ПРОВЕРИТЬ") {
+                            navController.navigate(Screen.CartCheckout.route)
+                        }
                     }
-                }
                     Spacer(modifier = Modifier.height(10.dp))
-                BottomNavigation(navController = navController)
-            }
-    },
+                    BottomNavigation(navController = navController)
+                }
+            },
             backgroundColor = Background
         )
         { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                if (cartViewModel.cartUiState.data?.data?.isEmpty() == true){
+                if (cartViewModel.cartUiState.data?.data?.isEmpty() == true) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = "Карзина пуста",
@@ -233,7 +242,6 @@ fun CartScreen(
                         .padding(top = 0.dp, bottom = 20.dp)
                     //.verticalScroll(rememberScrollState())
                 ) {
-
                     item {
                         AppThemeTopText(
                             text = "Моя корзина",
@@ -242,10 +250,10 @@ fun CartScreen(
                             modifier = Modifier
                         )
                     }
-                    items(carts.value){
+                    items(carts.value) {
                         CartSaleProduct(navController = navController, data = it)
                     }
-                    item{
+                    item {
                         Column {
                             if (carts.value.isNotEmpty()) {
                                 Box(
@@ -260,24 +268,23 @@ fun CartScreen(
                                         .background(color = White, shape = RoundedCornerShape(8.dp))
                                         .requiredHeight(52.dp)
                                         .clickable(onClick = { coroutineScope.launch { modalBottomSheetState.show() } })
-
                                 )
                                 {
                                     Text(
-                                        text = "Введите ваш промокод", color = Gray, modifier = Modifier
+                                        text = "Введите ваш промокод",
+                                        color = Gray,
+                                        modifier = Modifier
                                             .align(
                                                 Alignment.CenterStart
                                             )
                                             .padding(start = 25.dp)
                                     )
                                 }
-
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 25.dp)
                                         .padding(top = 10.dp)
-
                                 ) {
                                     Text(
                                         text = "Общая сумма:",
@@ -285,10 +292,10 @@ fun CartScreen(
                                         fontSize = 14.sp,
                                         modifier = Modifier
                                             .align(Alignment.CenterStart)
-
                                     )
+
                                     Text(
-                                        text = "423TJS",
+                                        text = sum.toInt().toString() + "TJS",
                                         color = Black,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.SemiBold,
@@ -296,12 +303,9 @@ fun CartScreen(
                                     )
                                 }
                             }
-
                         }
                     }
-
                 }
-
             }
         }
     }
@@ -313,15 +317,15 @@ val LazyListState.isScrolled: Boolean
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun CartTextField(onClick: () -> Unit) {
+fun CartTextField(value: TextFieldValue, onValueChange: (TextFieldValue) -> Unit, onClick: () -> Unit) {
     var promocode by remember {
         mutableStateOf(TextFieldValue(""))
     }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
-        value = promocode,
-        onValueChange = { promocode = it },
+        value = value,
+        onValueChange = onValueChange,
         textStyle = TextStyle(
             fontSize = 14.sp,
         ),

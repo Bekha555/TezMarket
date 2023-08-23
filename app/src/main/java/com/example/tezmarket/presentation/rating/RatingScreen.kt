@@ -1,11 +1,8 @@
 package com.example.tezmarket.presentation.rating
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -21,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -30,6 +28,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.tezmarket.R
+import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.common.AppThemeTopText
@@ -57,6 +57,7 @@ fun RatingScreen(
 ) {
     val addProductRating = ratingViewModel.addProductRatingUiState.data
     val productRatingInfo = ratingViewModel.productRatingInfoUiState.data
+    val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = addProductRating, block = {
         ratingViewModel.getProductRating(productId = productId)
@@ -97,7 +98,8 @@ fun RatingScreen(
                         productRating = productRating
                     )
                     coroutineScope.launch { modalBottomSheetState.hide() }
-                    Toast.makeText(context, "Коментарий отправлен на проверку", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Коментарий отправлен на проверку", Toast.LENGTH_LONG)
+                        .show()
                 },
                 reviewTextValue = { reviewText = it },
                 selectedRating = { productRating = it })
@@ -121,12 +123,18 @@ fun RatingScreen(
                 RatingScreenBottomBar(onClick = {
                     coroutineScope.launch { modalBottomSheetState.show() }
                 })
-            }, backgroundColor = Transparent) {
+            }, backgroundColor = Transparent
+        ) {
 
             LazyColumn(
                 modifier = Modifier
                     .background(Background)
                     .fillMaxSize()
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = {
+                            localFocusManager.clearFocus()
+                        })
+                    }
             ) {
                 item {
                     AppThemeTopText(
@@ -136,11 +144,33 @@ fun RatingScreen(
                         modifier = Modifier
                     )
                 }
-                item {
-                    if (productRatingInfo != null) {
-                        RatingSection(productRatingInfo = productRatingInfo, ratingList = ratingList)
+                if (ratingViewModel.productRatingInfoUiState.data?.reviews?.data?.size == 0) {
+                    item {
+                        Box(modifier = Modifier.background(Transparent).height(500.dp)) {
+                            Text(
+                                text = "Отзывов пока нет, вы можете оставить отзыв первым",
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(
+                                        Alignment.Center
+                                    )
+                                    .padding(horizontal = 20.dp)
+                            )
+                        }
                     }
-                }
+
+                } else
+                    item {
+                        if (productRatingInfo != null) {
+                            RatingSection(
+                                productRatingInfo = productRatingInfo,
+                                ratingList = ratingList
+                            )
+                        }
+                    }
                 items(productRatingInfo?.reviews?.data ?: emptyList()) {
                     ReviewCard(it)
                 }
@@ -255,8 +285,9 @@ fun RatingBottomSheet(
             )
             TextField(
                 modifier = Modifier
-                    .width(375.dp)
+                    .fillMaxWidth()
                     .height(170.dp)
+                    .padding(horizontal = 20.dp)
                     .background(color = Transparent, shape = RoundedCornerShape(5.dp))
                     .shadow(elevation = 1.5.dp, shape = RoundedCornerShape(5.dp)),
                 colors = TextFieldDefaults.textFieldColors(
