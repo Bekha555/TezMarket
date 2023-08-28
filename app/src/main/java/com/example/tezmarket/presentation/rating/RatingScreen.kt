@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 fun RatingScreen(
     navController: NavController,
     productId: Int,
+    lazyListState: LazyListState,
     ratingViewModel: RatingViewModel = hiltViewModel()
 ) {
     val addProductRating = ratingViewModel.addProductRatingUiState.data
@@ -74,6 +75,16 @@ fun RatingScreen(
     val context = LocalContext.current
     var reviewText: String = ""
     var productRating: Int = 1
+
+    var visible by remember {
+        mutableStateOf(true)
+    }
+    if (lazyListState.firstVisibleItemIndex > 0) {
+        visible = false
+    }
+    if (lazyListState.firstVisibleItemIndex == 0) {
+        visible = true
+    }
 
     val ratingOfFive = productRatingInfo?.ratings
     val ratingList = mutableListOf<Int>()
@@ -108,7 +119,11 @@ fun RatingScreen(
             topBar = {
                 AppThemeTopBar(
                     navController = navController,
-                    title = "",
+                    title = if (!visible) {
+                        "Отзывы"
+                    } else {
+                        ""
+                    },
                     onClick = {},
                     shadow = false,
                     searchText = searchText,
@@ -126,7 +141,7 @@ fun RatingScreen(
             }, backgroundColor = Transparent
         ) {
 
-            LazyColumn(
+            LazyColumn(state = lazyListState,
                 modifier = Modifier
                     .background(Background)
                     .fillMaxSize()
@@ -138,7 +153,7 @@ fun RatingScreen(
             ) {
                 item {
                     AppThemeTopText(
-                        text = "Рейтинг и обзоры",
+                        text = "Рейтинг и отзывы",
                         color = Transparent,
                         shadow = false,
                         modifier = Modifier
@@ -146,9 +161,11 @@ fun RatingScreen(
                 }
                 if (ratingViewModel.productRatingInfoUiState.data?.reviews?.data?.size == 0) {
                     item {
-                        Box(modifier = Modifier.background(Transparent).height(500.dp)) {
+                        Box(modifier = Modifier
+                            .background(Transparent)
+                            .height(500.dp)) {
                             Text(
-                                text = "Отзывов пока нет, вы можете оставить отзыв первым",
+                                text = "Отзывов пока нет, вы можете стать первым кто оставит отзыв",
                                 color = Color.Gray,
                                 textAlign = TextAlign.Center,
                                 fontSize = 20.sp,
@@ -174,10 +191,14 @@ fun RatingScreen(
                 items(productRatingInfo?.reviews?.data ?: emptyList()) {
                     ReviewCard(it)
                 }
+                item{ Spacer(modifier = Modifier.height(150.dp))}
             }
         }
     }
 }
+
+val LazyListState.isScrolled: Boolean
+    get() = firstVisibleItemIndex > 0 || firstVisibleItemScrollOffset > 0
 
 @Composable
 fun RatingScreenBottomBar(onClick: () -> Unit) {
@@ -189,7 +210,7 @@ fun RatingScreenBottomBar(onClick: () -> Unit) {
                 Brush.verticalGradient(
                     colorStops = arrayOf(
                         Pair(0.1f, Transparent),
-                        Pair(1f, White)
+                        Pair(0.8f, White)
                     )
                 )
             ),
@@ -315,7 +336,7 @@ fun RatingBottomSheet(
 @Preview
 @Composable
 fun RatingScreenPreview() {
-    RatingScreen(productId = 1, navController = rememberNavController())
+    RatingScreen(productId = 1, navController = rememberNavController(), lazyListState = LazyListState())
 }
 
 

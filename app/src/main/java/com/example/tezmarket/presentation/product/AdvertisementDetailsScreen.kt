@@ -1,6 +1,5 @@
 package com.example.tezmarket.presentation.product
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -13,7 +12,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -25,13 +34,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -51,13 +64,9 @@ import coil.compose.AsyncImage
 import com.example.tezmarket.R
 import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.ProductShimmer
-import com.example.tezmarket.presentation.cart.CartViewModel
 import com.example.tezmarket.presentation.favorites.FavoritesViewModel
 import com.example.tezmarket.presentation.home.HomeViewModel
-import com.example.tezmarket.presentation.rating.RatingBar
-import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeTopBar
-import com.example.tezmarket.ui.common.SaleProduct
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
 import com.example.tezmarket.ui.theme.LightGray
@@ -65,28 +74,25 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import kotlin.math.roundToInt
 
+
 @OptIn(ExperimentalPagerApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ProductDetailsScreen(
+fun AdvertisementDetailsScreen(
     navController: NavController,
-    productId: Int,
+    advertisementId: Int,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    favoritesViewModel: FavoritesViewModel = hiltViewModel(),
-    cartViewModel: CartViewModel = hiltViewModel()
+    favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
     LaunchedEffect(key1 = Unit, block = {
-        Log.d("debug", productId.toString())
-        homeViewModel.getProductById(productId = productId)
-        homeViewModel.getSimularProducts(productId = productId)
-        homeViewModel.getAdvertisementById(advertisement_id = productId)
+        Log.d("debug", advertisementId.toString())
+        homeViewModel.getAdvertisementById(advertisement_id = advertisementId)
     })
 
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
-    val productByIdData = homeViewModel.productByIdUiState.data?.data
-    val similarProducts = homeViewModel.simularProductUiState.data?.data ?: emptyList()
+    val productByIdData = homeViewModel.advertisementByIduiState.data?.data
+    // val similarProducts = homeViewModel.simularProductUiState.data?.data ?: emptyList()
     val images = productByIdData?.images ?: emptyList()
 
     Log.d("debug", productByIdData.toString())
@@ -94,9 +100,7 @@ fun ProductDetailsScreen(
     var selected by remember {
         mutableStateOf(if (productByIdData?.isFavorite == true) 1 else 0)
     }
-    var inCart by remember {
-        mutableStateOf(if (productByIdData?.addedToCart == true) 1 else 0)
-    }
+
     var visible by remember {
         mutableStateOf(true)
     }
@@ -117,32 +121,7 @@ fun ProductDetailsScreen(
                 lazyListState = LazyListState()
             )
         }
-    }, bottomBar = {
-        if (visible) {
-            if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .background(White)
-                    .height(100.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                AppThemeButton(
-                    text = if (productByIdData?.addedToCart == false && inCart == 0) {
-                        "Добавить в корзину"
-                    } else {
-                        "Товар уже в корзине"
-                    },
-                    onClick = {
-                        if (productByIdData?.addedToCart == false && inCart == 0) {
-                            cartViewModel.addCartProduct(productId = productId, productQuantity = 1)
-                            inCart = 1
-                        }
-                    })
-            }
-        }
-        }
     }) {
-
 
         if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isNotEmpty()) {
             ProductShimmer()
@@ -193,13 +172,19 @@ fun ProductDetailsScreen(
                     Column(
                         modifier = Modifier.padding(vertical = 10.dp)
                     ) {
-                        Row(
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 10.dp)
-                                .padding(horizontal = 10.dp),
-                            horizontalArrangement = Arrangement.End
+                                .padding(horizontal = 10.dp)
                         ) {
+                            Text(
+                                modifier = Modifier.align(alignment = Alignment.CenterStart),
+                                text = "${productByIdData?.createdAt}",
+                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
+                                fontSize = 14.sp,
+                                color = Gray
+                            )
                             IconButton(
                                 onClick = {
                                     if (selected == 0) {
@@ -208,14 +193,15 @@ fun ProductDetailsScreen(
                                         selected = 0
                                     }
                                     favoritesViewModel.favoritesToggle(
-                                        productId = productId,
+                                        productId = advertisementId,
                                         productType = "product"
                                     )
                                 }, modifier = Modifier
                                     .size(40.dp)
                                     .shadow(elevation = 2.dp, clip = true, shape = CircleShape)
                                     .clip(CircleShape)
-                                    .background(color = White)
+                                    .background(color = Color.White)
+                                    .align(Alignment.CenterEnd)
                             ) {
                                 Image(
                                     painter = painterResource(
@@ -235,7 +221,8 @@ fun ProductDetailsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = "${productByIdData?.name}",
@@ -249,43 +236,34 @@ fun ProductDetailsScreen(
                             )
                         }
                         Text(
-                            text = "${productByIdData?.category?.name}",
+                            text = "${productByIdData?.category?.title}",
                             fontFamily = FontFamily(Font(R.font.metropolis_regular)),
                             fontSize = 12.sp,
                             color = Gray,
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 5.dp)
-                                .padding(horizontal = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            productByIdData?.avgRating?.let {
-                                RatingBar(
-                                    startRating = it,
-                                    selectable = false,
-                                    ratingSelected = {},
-                                    text = productByIdData.avgRating.toString(),
-                                    modifier = Modifier
-                                        .clickable {
-                                            navController.navigate(
-                                                Screen.ProductDetailsScreen.passProductDetails(
-                                                    productId = productId
-                                                )
-                                            )
-                                        }
-                                        .size(12.dp)
-                                )
-                            }
-                        }
 
                         Text(
                             modifier = Modifier.padding(vertical = 25.dp, horizontal = 10.dp),
                             text = "${productByIdData?.desc}",
                             fontFamily = FontFamily(Font(R.font.metropolis_regular))
                         )
+
                         Spacer(modifier = Modifier.height(30.dp))
+
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            modifier = Modifier.padding(horizontal = 10.dp)
+//                        ) {
+//                            Text(text = "Дата добавления:", fontSize = 14.sp, color = Gray)
+//                            Text(
+//                                modifier = Modifier.padding(start = 5.dp),
+//                                text = "${productByIdData?.createdAt}",
+//                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
+//                                fontSize = 14.sp,
+//                                color = Gray
+//                            )
+//                        }
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -293,7 +271,7 @@ fun ProductDetailsScreen(
                                 .clickable(onClick = {
                                     navController.navigate(
                                         Screen.RatingScreen.passProductDetails(
-                                            productId
+                                            advertisementId
                                         )
                                     )
                                 })
@@ -362,22 +340,22 @@ fun ProductDetailsScreen(
                                 ),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            for (product in similarProducts) {
-                                Box(modifier = Modifier.padding(start = 10.dp)) {
-                                    SaleProduct(
-                                        sale_label = "new",
-                                        width = 150.dp,
-                                        onClick = {
-                                            navController.navigate(
-                                                Screen.ProductDetailsScreen.passProductDetails(
-                                                    product.id!!
-                                                )
-                                            )
-                                        },
-                                        product = product
-                                    )
-                                }
-                            }
+//                            for (product in similarProducts) {
+//                                Box(modifier = Modifier.padding(start = 10.dp)) {
+//                                    SaleProduct(
+//                                        sale_label = "new",
+//                                        width = 150.dp,
+//                                        onClick = {
+//                                            navController.navigate(
+//                                                Screen.ProductDetailsScreen.passProductDetails(
+//                                                    product.id!!
+//                                                )
+//                                            )
+//                                        },
+//                                        product = product
+//                                    )
+//                                }
+//                            }
                         }
                     }
                 }
@@ -406,7 +384,7 @@ fun ProductDetailsScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Black)
+                        .background(Color.Black)
                 ) {
                     var zoom by remember { mutableStateOf(1f) }
                     var offsetX by remember { mutableStateOf(0f) }
@@ -464,7 +442,7 @@ fun ProductDetailsScreen(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "close",
-                            tint = White
+                            tint = Color.White
                         )
                     }
                 }

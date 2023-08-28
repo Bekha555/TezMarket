@@ -19,6 +19,7 @@ import com.example.tezmarket.presentation.catalog.CatalogScreen
 import com.example.tezmarket.presentation.favorites.FavoriteScreen
 import com.example.tezmarket.presentation.home.HomeScreen
 import com.example.tezmarket.presentation.home.ShowAllScreen
+import com.example.tezmarket.presentation.product.AdvertisementDetailsScreen
 import com.example.tezmarket.presentation.product.ProductDetailsScreen
 import com.example.tezmarket.presentation.profile.AddAdvertisementScreen
 import com.example.tezmarket.presentation.profile.AddressAddScreen
@@ -78,6 +79,14 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             ProductDetailsScreen(navController, it.arguments!!.getInt("product_id"))
         }
+        composable(
+            route = Screen.AdvertisementDetailsScreen.route,
+            arguments = listOf(navArgument("advertisement_id") {
+                type = NavType.IntType
+            })
+        ) {
+            AdvertisementDetailsScreen(navController, it.arguments!!.getInt("advertisement_id"))
+        }
         composable(route = Screen.OrderDetailsScreen.route) {
             OrderDetailsScreen(navController)
         }
@@ -90,7 +99,11 @@ fun AppNavigation(navController: NavHostController) {
                 type = NavType.IntType
             })
         ) {
-            RatingScreen(navController, it.arguments!!.getInt(("product_id")))
+            RatingScreen(
+                navController,
+                it.arguments!!.getInt(("product_id")),
+                lazyListState = LazyListState()
+            )
         }
         composable(
             route = Screen.ShowAllScreen.route,
@@ -103,7 +116,10 @@ fun AppNavigation(navController: NavHostController) {
         composable(route = Screen.AdressesScreen.route) {
             Addresses(navController)
         }
-        composable(route = Screen.AddressAddScreen.route, arguments = listOf(navArgument(name = "adress_id"){type = NavType.IntType})) {
+        composable(
+            route = Screen.AddressAddScreen.route,
+            arguments = listOf(navArgument(name = "adress_id") { type = NavType.IntType })
+        ) {
             AddressAddScreen(navController, adressId = it.arguments!!.getInt("adress_id"))
         }
         composable(route = Screen.MyAdvertisementsScreen.route) {
@@ -115,9 +131,13 @@ fun AppNavigation(navController: NavHostController) {
         composable(route = Screen.ChooseCategory.route) {
             ChooseCategory(navController)
         }
-        composable(route = Screen.ChooseAttributs.route, arguments = listOf(navArgument(name = "category_id"){type = NavType.IntType})) {
+        composable(
+            route = Screen.ChooseAttributs.route,
+            arguments = listOf(navArgument(name = "category_id") { type = NavType.IntType })
+        ) {
             ChooseAttributs(categoryId = it.arguments!!.getInt("category_id"), navController)
         }
+
     }
 
 

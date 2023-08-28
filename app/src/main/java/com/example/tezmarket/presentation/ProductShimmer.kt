@@ -134,7 +134,7 @@ fun Product(brush: Brush) {
                 .height(10.dp)
                 .background(brush, shape = RoundedCornerShape(4.dp))
         )
-        repeat(10) {
+        repeat(7) {
         Box(
             modifier = Modifier
                 .padding(top = 5.dp)
@@ -144,7 +144,7 @@ fun Product(brush: Brush) {
                 .background(brush, shape = RoundedCornerShape(4.dp))
         )
     }
-
+Box(modifier = Modifier.fillMaxWidth().height(90.dp).padding(horizontal = 20.dp, vertical = 20.dp).background(brush, shape = RoundedCornerShape(20.dp)))
 
     }
 }

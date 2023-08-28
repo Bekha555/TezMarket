@@ -33,6 +33,8 @@ import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
 import retrofit2.Response
 import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -123,11 +125,12 @@ interface TezMarketApi {
         @Path("product_id") productId: Int
     ): Response<ProductRatingData>
 
+    @FormUrlEncoded
     @POST("products/{product_id}/rating")
     suspend fun addProductRating(
         @Path("product_id") productId: Int,
-        @Query("comment") productComment: String,
-        @Query("rating") productRating: Int
+        @Field("comment") productComment: String,
+        @Field("rating") productRating: Int
     ): Response<AddProductRating>
 
 

@@ -115,7 +115,7 @@ fun HomeScreen(
                             item {
                                 SaleProductScroll(
                                     title = "Объявления",
-                                    title_mid = "Ваши объявления",
+                                    title_mid = "Объявления для вас",
                                     sale_label = "new",
                                     navController = navController,
                                     products = advertisements

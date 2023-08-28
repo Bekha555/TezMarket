@@ -24,6 +24,11 @@ sealed class Screen(val route: String) {
             return "product_details_screen?product_id=$productId"
         }
     }
+    object AdvertisementDetailsScreen : Screen("advertisement_details_screen?advertisement_id={advertisement_id}"){
+        fun passAdvertisementDetails(advertisementId: Int): String{
+            return "advertisement_details_screen?advertisement_id=$advertisementId"
+        }
+    }
 
     object OrderDetailsScreen : Screen("order_details_screen")
     object MyOrdersScreen : Screen("my_orders_screen")
