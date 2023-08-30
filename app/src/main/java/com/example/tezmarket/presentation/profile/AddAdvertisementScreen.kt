@@ -2,8 +2,6 @@ package com.example.tezmarket.presentation.profile
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -31,13 +29,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -67,19 +66,34 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tezmarket.R
+import com.example.tezmarket.data.getFileFromPath
+import com.example.tezmarket.data.remote.model.addadvertisement.Attribute
+import com.example.tezmarket.presentation.profile.AdressViewModel_Factory.create
 import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeDropdown
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Primary
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "RememberReturnType")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+
+@SuppressLint(
+    "UnusedMaterialScaffoldPaddingParameter", "RememberReturnType",
+    "CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition"
+)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddAdvertisementScreen(
     navController: NavController,
     advertisementViewModel: AdvertisementViewModel = hiltViewModel()
 ) {
+
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
@@ -92,9 +106,7 @@ fun AddAdvertisementScreen(
     var price by remember {
         mutableStateOf(TextFieldValue("0"))
     }
-    var visible by remember {
-        mutableStateOf(false)
-    }
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val mutableUriList = remember { mutableStateListOf<Uri?>() }
     val launcher = rememberLauncherForActivityResult(
@@ -103,16 +115,26 @@ fun AddAdvertisementScreen(
             uris.forEach {
                 mutableUriList.add(it)
             }
-            Log.d("debug", mutableUriList.toString())
         }
     )
-    val direction = remember { arrayOf("") }
 
     val interactionScope = remember {
         MutableInteractionSource()
     }
     val localFocusManager = LocalFocusManager.current
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    var imagesFile = mutableListOf<File>()
+
+    mutableUriList.forEach { uri ->
+        val file = uri?.let { getFileFromPath(it, context) }
+        if (file != null) {
+            imagesFile.add(file)
+        }
+    }
+
+
 
     Scaffold(
         topBar = {
@@ -129,21 +151,21 @@ fun AddAdvertisementScreen(
             )
         }, bottomBar = {
             AppThemeButton(text = "Сохранить") {
-                advertisementViewModel.addAdvertisement(
-                    title = name.text,
-                    price = price.text.toInt(),
-                    category_id = 2,
-                    description = description.text,
-                    images = "dist/images/food-beverage-12.jpg",
-                    attribute_id = 3
-                )
-                Toast.makeText(
-                    context,
-                    advertisementViewModel.addAdvertisementUiState.error,
-                    Toast.LENGTH_SHORT
-                ).show()
+                advertisementViewModel.tempImageLinks.clear()
+                imagesFile.forEach { file ->
+                    advertisementViewModel.uploadFile(
+                        MultipartBody.Part.createFormData(
+                            "file", file.name, file
+                                .asRequestBody("image/*".toMediaTypeOrNull())
+                        )
+                    )
+                }
 
-//                navController.navigate(Screen.MyAdvertisementsScreen.route)
+//                navController.navigate(Screen.MyAdvertisementsScreen.route){
+//                    popUpTo(Screen.AdressesScreen.route){
+//                        inclusive = true
+//                    }
+//                }
             }
         }, backgroundColor = Background
     ) {
@@ -327,7 +349,6 @@ fun AddAdvertisementScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Log.d("photos of review", mutableUriList.toString())
                 items(mutableUriList) {
                     AsyncImage(
                         modifier = Modifier
@@ -368,7 +389,27 @@ fun AddAdvertisementScreen(
                     }
                 }
             }
+        }
+    }
 
+    if (advertisementViewModel.uploadFilesUiState.data?.filePath?.isNotEmpty() == true) {
+        if (advertisementViewModel.tempImageLinks.size == imagesFile.size) {
+            LaunchedEffect(key1 = true, block = {
+                val mapData = HashMap<String, Any>()
+                mapData["title"] = mapOf("ru" to name.text)
+                mapData["price"] = price.text.toInt()
+                mapData["category_id"] = 2
+                mapData["description"] = mapOf("ru" to description.text)
+                mapData["images"] = advertisementViewModel.tempImageLinks
+                mapData["attrs"] = listOf(Attribute(1, "", "", "a"))
+                advertisementViewModel.addAdvertisement(mapData)
+                advertisementViewModel.tempImageLinks.clear()
+            })
         }
     }
 }
+
+
+
+
+

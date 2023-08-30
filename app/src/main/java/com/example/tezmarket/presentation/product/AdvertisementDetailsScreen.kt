@@ -1,6 +1,7 @@
-package com.example.tezmarket.presentation.product
-
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,11 +29,12 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -50,10 +53,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -62,14 +68,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tezmarket.R
-import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.ProductShimmer
 import com.example.tezmarket.presentation.favorites.FavoritesViewModel
 import com.example.tezmarket.presentation.home.HomeViewModel
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
-import com.example.tezmarket.ui.theme.LightGray
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import kotlin.math.roundToInt
@@ -91,6 +95,7 @@ fun AdvertisementDetailsScreen(
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
+
     val productByIdData = homeViewModel.advertisementByIduiState.data?.data
     // val similarProducts = homeViewModel.simularProductUiState.data?.data ?: emptyList()
     val images = productByIdData?.images ?: emptyList()
@@ -123,7 +128,7 @@ fun AdvertisementDetailsScreen(
         }
     }) {
 
-        if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isNotEmpty()) {
+        if (homeViewModel.advertisementByIduiState.isLoading || homeViewModel.advertisementByIduiState.error.isNotEmpty()) {
             ProductShimmer()
         } else {
 
@@ -179,7 +184,7 @@ fun AdvertisementDetailsScreen(
                                 .padding(horizontal = 10.dp)
                         ) {
                             Text(
-                                modifier = Modifier.align(alignment = Alignment.CenterStart),
+                                modifier = Modifier.align(alignment = Alignment.TopStart),
                                 text = "${productByIdData?.createdAt}",
                                 fontFamily = FontFamily(Font(R.font.metropolis_regular)),
                                 fontSize = 14.sp,
@@ -249,87 +254,77 @@ fun AdvertisementDetailsScreen(
                             fontFamily = FontFamily(Font(R.font.metropolis_regular))
                         )
 
-                        Spacer(modifier = Modifier.height(30.dp))
+
+                        //         Spacer(modifier = Modifier.height(30.dp))
+
+
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(top = 10.dp)
+//                                .clickable(onClick = {
+//                                    navController.navigate(
+//                                        Screen.RatingScreen.passProductDetails(
+//                                            advertisementId
+//                                        )
+//                                    )
+//                                })
+//                        )
+//                        {
+//                            Divider(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .align(Alignment.TopCenter),
+//                                thickness = 0.5.dp,
+//                                color = LightGray
+//                            )
+//                            Text(
+//                                text = "Отзывы",
+//                                fontSize = 16.sp,
+//                                modifier = Modifier
+//                                    .padding(start = 10.dp)
+//                                    .padding(vertical = 10.dp)
+//                                    .align(Alignment.CenterStart)
+//                            )
+//                            Icon(
+//                                painter = painterResource(id = R.drawable.profile_item_button),
+//                                contentDescription = null,
+//                                modifier = Modifier
+//                                    .padding(end = 10.dp)
+//                                    .size(10.dp)
+//                                    .align(
+//                                        Alignment.CenterEnd
+//                                    )
+//                            )
+//                            Divider(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .align(Alignment.BottomCenter),
+//                                thickness = 0.5.dp,
+//                                color = LightGray
+//                            )
+//                        }
+
 
 //                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            modifier = Modifier.padding(horizontal = 10.dp)
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(horizontal = 10.dp, vertical = 10.dp),
+//                            horizontalArrangement = Arrangement.SpaceBetween,
+//                            verticalAlignment = Alignment.CenterVertically
 //                        ) {
-//                            Text(text = "Дата добавления:", fontSize = 14.sp, color = Gray)
 //                            Text(
-//                                modifier = Modifier.padding(start = 5.dp),
-//                                text = "${productByIdData?.createdAt}",
+//                                text = "Вам может понравиться",
+//                                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+//                                fontSize = 20.sp
+//                            )
+//                            Text(
+//                                text = "6 товаров",
 //                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
-//                                fontSize = 14.sp,
+//                                fontSize = 13.sp,
 //                                color = Gray
 //                            )
 //                        }
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp)
-                                .clickable(onClick = {
-                                    navController.navigate(
-                                        Screen.RatingScreen.passProductDetails(
-                                            advertisementId
-                                        )
-                                    )
-                                })
-                        )
-                        {
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.TopCenter),
-                                thickness = 0.5.dp,
-                                color = LightGray
-                            )
-                            Text(
-                                text = "Отзывы",
-                                fontSize = 16.sp,
-                                modifier = Modifier
-                                    .padding(start = 10.dp)
-                                    .padding(vertical = 10.dp)
-                                    .align(Alignment.CenterStart)
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.profile_item_button),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(end = 10.dp)
-                                    .size(10.dp)
-                                    .align(
-                                        Alignment.CenterEnd
-                                    )
-                            )
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.BottomCenter),
-                                thickness = 0.5.dp,
-                                color = LightGray
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 10.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Вам может понравиться",
-                                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
-                                fontSize = 20.sp
-                            )
-                            Text(
-                                text = "6 товаров",
-                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
-                                fontSize = 13.sp,
-                                color = Gray
-                            )
-                        }
 
                         Row(
                             modifier = Modifier
@@ -358,6 +353,29 @@ fun AdvertisementDetailsScreen(
 //                            }
                         }
                     }
+
+                    if (homeViewModel.advertisementByIduiState.data?.data?.attributes?.isNotEmpty() == true) {
+                        Text(
+                            text = "Характеристики",
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                        for (item in homeViewModel.advertisementByIduiState.data?.data?.attributes!!) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = 10.dp)
+                                    .padding(horizontal = 10.dp)
+                            ) {
+                                Text(text = item.name.toString(), fontSize = 14.sp, color = Gray)
+                                Text(text = item.value.toString())
+                            }
+                        }
+                        CallHolder(name = productByIdData?.client?.name.toString(), number = productByIdData?.client?.phone!!)
+
+
+                    }
+
                 }
             }
 
@@ -449,5 +467,68 @@ fun AdvertisementDetailsScreen(
 
             }
         }
+    }
+}
+
+
+@Composable
+fun CallHolder(name: String, number: String) {
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+            .padding(top = 20.dp),
+
+        ) {
+        Image(
+            modifier = Modifier
+                .size(50.dp)
+                .align(Alignment.CenterStart),
+            contentScale = ContentScale.Crop,
+            painter = painterResource(id = R.drawable.avatar),
+            contentDescription = null
+        )
+        Column(
+            modifier = Modifier
+                .padding(end = 100.dp)
+                .align(Alignment.Center),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = name,
+                fontFamily = FontFamily(Font(R.font.metropolis_bold))
+            )
+            Text(
+                text = number,
+                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                color = Gray
+            )
+        }
+        IconButton(
+            onClick = {
+                val u = Uri.parse("tel:" + "+" + number)
+                val i = Intent(Intent.ACTION_DIAL, u)
+                try {
+                    context.startActivity(i)
+                } catch (s: SecurityException) {
+                    Toast.makeText(context, "Чтото пошло не так", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }, modifier = Modifier
+                .size(30.dp)
+                .align(
+                    Alignment.CenterEnd
+                )
+        ) {
+            Image(
+                contentScale = ContentScale.Crop,
+                painter = painterResource(id = R.drawable.call),
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
+        }
+
     }
 }

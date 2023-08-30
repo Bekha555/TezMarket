@@ -31,13 +31,18 @@ import com.example.tezmarket.data.remote.model.shops.ShopsData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
+import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -181,14 +186,11 @@ interface TezMarketApi {
     @GET("profile/advertisements")
     suspend fun getMyAdvertisements(): Response<MyAdvertisementsData>
 
+    @Headers("Content-Type: application/json")
     @POST("profile/advertisements")
+    @JvmSuppressWildcards
     suspend fun addAdvertisement(
-        @Query("title") title: String,
-        @Query("price") price: Int,
-        @Query("category_id") category_id: Int,
-        @Query("description") description: String,
-        @Query("images") images: String,
-        @Query("attribute_id") attribute_id: Int,
+        @Body request: Map<String, Any>
     ): Response<AddAdvertisement>
 
     @DELETE("profile/advertisements/{advertisement_id}")
@@ -202,9 +204,10 @@ interface TezMarketApi {
         @QueryMap filterData: Map<String, Any>
     ): Response<FilteredProducts>
 
-    @GET("upload-file")
+    @Multipart
+    @POST("upload-file")
     suspend fun uploadFile(
-        @Query("file") files: File
+        @Part files: MultipartBody.Part
     ): Response<UploadFiles>
 
     @GET("attributes/{category_id}")

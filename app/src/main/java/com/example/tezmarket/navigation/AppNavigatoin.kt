@@ -1,5 +1,6 @@
 package com.example.tezmarket.navigation
 
+import AdvertisementDetailsScreen
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -19,7 +20,6 @@ import com.example.tezmarket.presentation.catalog.CatalogScreen
 import com.example.tezmarket.presentation.favorites.FavoriteScreen
 import com.example.tezmarket.presentation.home.HomeScreen
 import com.example.tezmarket.presentation.home.ShowAllScreen
-import com.example.tezmarket.presentation.product.AdvertisementDetailsScreen
 import com.example.tezmarket.presentation.product.ProductDetailsScreen
 import com.example.tezmarket.presentation.profile.AddAdvertisementScreen
 import com.example.tezmarket.presentation.profile.AddressAddScreen

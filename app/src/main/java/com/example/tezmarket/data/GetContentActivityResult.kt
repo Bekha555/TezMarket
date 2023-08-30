@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import java.io.File
 import java.io.IOException
+import kotlin.random.Random
 
 
 class GetContentActivityResult(
@@ -55,9 +56,9 @@ private fun File.writeBitmap(bitmap: Bitmap) {
     }
 }
 
-fun getFileFromPath(uri: Uri, context: Context): File {
+fun getFileFromPath(uri: Uri?, context: Context): File {
     val bitmap = decodeUriToBitmap(context, uri)
-    val file = File("${context.cacheDir}", "image.jpeg")
+    val file = File("${context.cacheDir}", "image${Random(5)}.jpeg")
     file.writeBitmap(bitmap)
     return file
 }
