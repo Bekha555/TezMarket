@@ -280,78 +280,6 @@ fun AdvertisementDetailsScreen(
                             fontFamily = FontFamily(Font(R.font.metropolis_regular))
                         )
 
-
-                        //         Spacer(modifier = Modifier.height(30.dp))
-
-
-//                        Box(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(top = 10.dp)
-//                                .clickable(onClick = {
-//                                    navController.navigate(
-//                                        Screen.RatingScreen.passProductDetails(
-//                                            advertisementId
-//                                        )
-//                                    )
-//                                })
-//                        )
-//                        {
-//                            Divider(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .align(Alignment.TopCenter),
-//                                thickness = 0.5.dp,
-//                                color = LightGray
-//                            )
-//                            Text(
-//                                text = "Отзывы",
-//                                fontSize = 16.sp,
-//                                modifier = Modifier
-//                                    .padding(start = 10.dp)
-//                                    .padding(vertical = 10.dp)
-//                                    .align(Alignment.CenterStart)
-//                            )
-//                            Icon(
-//                                painter = painterResource(id = R.drawable.profile_item_button),
-//                                contentDescription = null,
-//                                modifier = Modifier
-//                                    .padding(end = 10.dp)
-//                                    .size(10.dp)
-//                                    .align(
-//                                        Alignment.CenterEnd
-//                                    )
-//                            )
-//                            Divider(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .align(Alignment.BottomCenter),
-//                                thickness = 0.5.dp,
-//                                color = LightGray
-//                            )
-//                        }
-
-
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(horizontal = 10.dp, vertical = 10.dp),
-//                            horizontalArrangement = Arrangement.SpaceBetween,
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            Text(
-//                                text = "Вам может понравиться",
-//                                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
-//                                fontSize = 20.sp
-//                            )
-//                            Text(
-//                                text = "6 товаров",
-//                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
-//                                fontSize = 13.sp,
-//                                color = Gray
-//                            )
-//                        }
-
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -361,22 +289,6 @@ fun AdvertisementDetailsScreen(
                                 ),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-//                            for (product in similarProducts) {
-//                                Box(modifier = Modifier.padding(start = 10.dp)) {
-//                                    SaleProduct(
-//                                        sale_label = "new",
-//                                        width = 150.dp,
-//                                        onClick = {
-//                                            navController.navigate(
-//                                                Screen.ProductDetailsScreen.passProductDetails(
-//                                                    product.id!!
-//                                                )
-//                                            )
-//                                        },
-//                                        product = product
-//                                    )
-//                                }
-//                            }
                         }
                     }
 

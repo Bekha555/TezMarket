@@ -16,6 +16,7 @@ import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.Data
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
+import com.example.tezmarket.data.remote.model.shopsbyid.ShopByIdData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.repositoryimpl.ProductRepositoryImpl
 import com.example.tezmarket.data.repositoryimpl.ShopsRepositoryImpl
@@ -41,6 +42,8 @@ class HomeViewModel @Inject constructor(
         private set
 
     var advertisementByIduiState by mutableStateOf(UiState<AdvertisementById>())
+
+    var shopByIdUiState by mutableStateOf(UiState<ShopByIdData>())
 
     var simularProductUiState by mutableStateOf(UiState<SimularProduct>())
         private set
@@ -207,6 +210,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getShopById(shop_id: Int) {
+        viewModelScope.launch {
+            productRepositoryImpl.getShopById(shop_id).collect { result ->
+                shopByIdUiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
+    }
 
     fun getSimularProducts(productId: Int) {2
         viewModelScope.launch {

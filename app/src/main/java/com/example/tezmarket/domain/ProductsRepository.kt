@@ -8,6 +8,7 @@ import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
 import com.example.tezmarket.data.remote.model.recproducts.Data
+import com.example.tezmarket.data.remote.model.shopsbyid.ShopByIdData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +21,8 @@ interface ProductsRepository {
     suspend fun getProductById(productId: Int): Flow<Resource<ProductById>>
 
     suspend fun getAdvertisementById(advertisement_id: Int): Flow<Resource<AdvertisementById>>
+
+    suspend fun getShopById(shop_id: Int): Flow<Resource<ShopByIdData>>
   
     fun getDiscProducts(): PagingSource<Int, com.example.tezmarket.data.remote.model.discProducts.Data>
 

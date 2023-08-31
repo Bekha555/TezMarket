@@ -28,6 +28,7 @@ import com.example.tezmarket.data.remote.model.productrating.ProductRatingData
 import com.example.tezmarket.data.remote.model.products.ProductsData
 import com.example.tezmarket.data.remote.model.recproducts.RecProducts
 import com.example.tezmarket.data.remote.model.shops.ShopsData
+import com.example.tezmarket.data.remote.model.shopsbyid.ShopByIdData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.remote.model.uploadFiles.UploadFiles
 import com.example.tezmarket.data.remote.model.user.UserData
@@ -76,6 +77,10 @@ interface TezMarketApi {
         @Path("advertisement_id") advertisement_id: Int
     ): Response<AdvertisementById>
 
+    @GET("/shops/{shop_id}")
+    suspend fun getShopById(
+        @Path("shop_id") shop_id: Int
+    ): Response<ShopByIdData>
 
     @GET("discounted-products")
     suspend fun getDiscProducts(
