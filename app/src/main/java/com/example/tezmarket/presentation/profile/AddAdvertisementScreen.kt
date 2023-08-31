@@ -2,6 +2,7 @@ package com.example.tezmarket.presentation.profile
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -68,6 +69,7 @@ import coil.compose.AsyncImage
 import com.example.tezmarket.R
 import com.example.tezmarket.data.getFileFromPath
 import com.example.tezmarket.data.remote.model.addadvertisement.Attribute
+import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.profile.AdressViewModel_Factory.create
 import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeDropdown
@@ -160,12 +162,10 @@ fun AddAdvertisementScreen(
                         )
                     )
                 }
-
-//                navController.navigate(Screen.MyAdvertisementsScreen.route){
-//                    popUpTo(Screen.AdressesScreen.route){
-//                        inclusive = true
-//                    }
-//                }
+                Toast.makeText(context, "Объявление отправлено в модерацию", Toast.LENGTH_SHORT).show()
+                navController.navigate(Screen.MyAdvertisementsScreen.route){
+                    popUpTo(Screen.MyAdvertisementsScreen.route){inclusive = true}
+                }
             }
         }, backgroundColor = Background
     ) {

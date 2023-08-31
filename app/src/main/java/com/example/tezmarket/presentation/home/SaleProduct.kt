@@ -702,7 +702,7 @@ fun <T> SaleProduct(
                         AsyncImage(
                             model = product.logo,
                             contentDescription = "sale",
-                            contentScale = ContentScale.Crop,
+                            contentScale = ContentScale.FillBounds,
                             modifier = Modifier
                                 .height(184.dp)
                                 .clip(shape = RoundedCornerShape(15.dp))

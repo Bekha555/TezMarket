@@ -61,8 +61,11 @@ import com.example.tezmarket.ui.common.SaleProduct
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
 import com.example.tezmarket.ui.theme.LightGray
+import com.example.tezmarket.ui.theme.LightPurple
+import com.example.tezmarket.ui.theme.Primary
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalPagerApi::class)
@@ -143,6 +146,7 @@ fun ProductDetailsScreen(
         }
     }) {
 
+        val pagerState = rememberPagerState()
 
         if (homeViewModel.productByIdUiState.isLoading || homeViewModel.productByIdUiState.error.isNotEmpty()) {
             ProductShimmer()
@@ -174,7 +178,8 @@ fun ProductDetailsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(420.dp),
-                        count = images.size
+                        count = images.size,
+                        state = pagerState
                     ) { page ->
                         val imageUrl = images[page]
                         AsyncImage(
@@ -189,6 +194,25 @@ fun ProductDetailsScreen(
                                     visible = false
                                 })
                         )
+                    }
+                    if (images.size > 1) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            for (i in 0 until images.size) {
+                                val color =
+                                    if (pagerState.currentPage == i) Primary else LightPurple
+                                Box(
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                        .size(8.dp)
+                                        .background(color = color, shape = CircleShape)
+                                )
+                            }
+                        }
                     }
                     Column(
                         modifier = Modifier.padding(vertical = 10.dp)

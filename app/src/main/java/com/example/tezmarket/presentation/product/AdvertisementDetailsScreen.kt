@@ -74,8 +74,11 @@ import com.example.tezmarket.presentation.home.HomeViewModel
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
+import com.example.tezmarket.ui.theme.LightPurple
+import com.example.tezmarket.ui.theme.Primary
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import kotlin.math.roundToInt
 
 
@@ -128,6 +131,8 @@ fun AdvertisementDetailsScreen(
         }
     }) {
 
+       val pagerState = rememberPagerState()
+
         if (homeViewModel.advertisementByIduiState.isLoading || homeViewModel.advertisementByIduiState.error.isNotEmpty()) {
             ProductShimmer()
         } else {
@@ -158,7 +163,8 @@ fun AdvertisementDetailsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(420.dp),
-                        count = images.size
+                        count = images.size,
+                        state = pagerState
                     ) { page ->
                         val imageUrl = images[page]
                         AsyncImage(
@@ -174,6 +180,26 @@ fun AdvertisementDetailsScreen(
                                 })
                         )
                     }
+                    if (images.size > 1) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            for (i in 0 until images.size) {
+                                val color =
+                                    if (pagerState.currentPage == i) Primary else LightPurple
+                                Box(
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                        .size(8.dp)
+                                        .background(color = color, shape = CircleShape)
+                                )
+                            }
+                        }
+                }
+
                     Column(
                         modifier = Modifier.padding(vertical = 10.dp)
                     ) {
@@ -187,7 +213,7 @@ fun AdvertisementDetailsScreen(
                                 modifier = Modifier.align(alignment = Alignment.TopStart),
                                 text = "${productByIdData?.createdAt}",
                                 fontFamily = FontFamily(Font(R.font.metropolis_regular)),
-                                fontSize = 14.sp,
+                                fontSize = 12.sp,
                                 color = Gray
                             )
                             IconButton(
@@ -371,7 +397,7 @@ fun AdvertisementDetailsScreen(
                                 Text(text = item.value.toString())
                             }
                         }
-                        CallHolder(name = productByIdData?.client?.name.toString(), number = productByIdData?.client?.phone!!)
+                        CallSection(name = productByIdData?.client?.name.toString(), number = productByIdData?.client?.phone!!)
 
 
                     }
@@ -472,7 +498,7 @@ fun AdvertisementDetailsScreen(
 
 
 @Composable
-fun CallHolder(name: String, number: String) {
+fun CallSection(name: String, number: String) {
     val context = LocalContext.current
 
     Box(
@@ -492,8 +518,8 @@ fun CallHolder(name: String, number: String) {
         )
         Column(
             modifier = Modifier
-                .padding(end = 100.dp)
-                .align(Alignment.Center),
+                .padding(start = 60.dp)
+                .align(Alignment.CenterStart),
             horizontalAlignment = Alignment.Start
         ) {
             Text(

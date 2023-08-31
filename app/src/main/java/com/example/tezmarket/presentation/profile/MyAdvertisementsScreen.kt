@@ -30,12 +30,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -93,6 +96,22 @@ fun MyAdvertisementsScreen(
                 shadow = false,
                 modifier = Modifier
             )
+            if (advertisementViewModel.myAdvertisementsUiState.data?.data?.isEmpty() == true){
+                Box(modifier = Modifier.height(500.dp)) {
+                    Text(
+                        text = "Вы пока не создовали объявления",
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(
+                                Alignment.Center
+                            )
+                            .padding(horizontal = 20.dp)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(25.dp))
 
             if (advertisements != null) {
