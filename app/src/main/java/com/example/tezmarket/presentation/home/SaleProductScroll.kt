@@ -110,6 +110,13 @@ fun <T> SaleProductScroll(
                                     )
                                 }
 
+                                is com.example.tezmarket.data.remote.model.shops.Data -> {
+                                    navController.navigate(
+                                        Screen.ShopDetailsScreen.passShopDetails(
+                                            item.id ?: 1
+                                        )
+                                    )
+                                }
 
                                 else -> {
                                     navController.navigate(
