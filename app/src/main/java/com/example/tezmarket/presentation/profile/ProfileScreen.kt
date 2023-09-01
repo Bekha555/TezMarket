@@ -1,9 +1,13 @@
 package com.example.tezmarket.presentation.profile
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.tezmarket.navigation.BottomNavigation
@@ -29,20 +34,6 @@ fun ProfileScreen(
     }
 
     Scaffold(
-        topBar = {
-            AppThemeTopBar(
-                title = "",
-                backBtn = false,
-                icon = "search",
-                searchText = searchText,
-                onValueChange = {},
-                onClick = { /*TODO*/ },
-                navController = navController,
-                shadow = false,
-                modifier = Modifier,
-                lazyListState = LazyListState()
-            )
-        },
         bottomBar = { BottomNavigation(navController = navController) },
         backgroundColor = Background
     )
@@ -51,7 +42,9 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .verticalScroll(state = rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(50.dp))
             AppThemeTopText(
                 text = "Мой профиль",
                 color = Transparent,

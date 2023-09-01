@@ -70,18 +70,14 @@ import com.example.tezmarket.R
 import com.example.tezmarket.data.getFileFromPath
 import com.example.tezmarket.data.remote.model.addadvertisement.Attribute
 import com.example.tezmarket.navigation.Screen
-import com.example.tezmarket.presentation.profile.AdressViewModel_Factory.create
 import com.example.tezmarket.ui.common.AppThemeButton
 import com.example.tezmarket.ui.common.AppThemeDropdown
 import com.example.tezmarket.ui.common.AppThemeTopBar
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Primary
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 
@@ -162,10 +158,17 @@ fun AddAdvertisementScreen(
                         )
                     )
                 }
-                Toast.makeText(context, "Объявление отправлено в модерацию", Toast.LENGTH_SHORT).show()
-                navController.navigate(Screen.MyAdvertisementsScreen.route){
-                    popUpTo(Screen.MyAdvertisementsScreen.route){inclusive = true}
-                }
+                Toast.makeText(context, "Пожалуйста подождите", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            if (advertisementViewModel.addAdvertisementUiState.data?.message?.isNotEmpty() == true) {
+                LaunchedEffect(key1 = Unit, block = {
+                    Toast.makeText(context, "Объявление отправлено в модерацию", Toast.LENGTH_SHORT)
+                        .show()
+                    navController.navigate(Screen.MyAdvertisementsScreen.route) {
+                        popUpTo(Screen.MyAdvertisementsScreen.route) { inclusive = true }
+                    }
+                })
             }
         }, backgroundColor = Background
     ) {
