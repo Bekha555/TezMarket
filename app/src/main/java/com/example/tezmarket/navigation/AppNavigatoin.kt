@@ -21,6 +21,7 @@ import com.example.tezmarket.presentation.favorites.FavoriteScreen
 import com.example.tezmarket.presentation.home.HomeScreen
 import com.example.tezmarket.presentation.home.ShowAllScreen
 import com.example.tezmarket.presentation.product.ProductDetailsScreen
+import com.example.tezmarket.presentation.product.ShopDetailScreen
 import com.example.tezmarket.presentation.profile.AddAdvertisementScreen
 import com.example.tezmarket.presentation.profile.AddressAddScreen
 import com.example.tezmarket.presentation.profile.Addresses
@@ -87,6 +88,17 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             AdvertisementDetailsScreen(navController, it.arguments!!.getInt("advertisement_id"))
         }
+
+        composable(
+            route = Screen.ShopDetailsScreen.route,
+            arguments = listOf(navArgument("shop_id") {
+                type = NavType.IntType
+            })
+        ) {
+            ShopDetailScreen(navController, it.arguments!!.getInt("shop_id"))
+        }
+
+
         composable(route = Screen.OrderDetailsScreen.route) {
             OrderDetailsScreen(navController)
         }

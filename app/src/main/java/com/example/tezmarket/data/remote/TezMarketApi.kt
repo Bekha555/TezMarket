@@ -77,7 +77,7 @@ interface TezMarketApi {
         @Path("advertisement_id") advertisement_id: Int
     ): Response<AdvertisementById>
 
-    @GET("/shops/{shop_id}")
+    @GET("shops/{shop_id}")
     suspend fun getShopById(
         @Path("shop_id") shop_id: Int
     ): Response<ShopByIdData>

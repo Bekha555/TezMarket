@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class ShopByIdData(
     @Json(name = "data")
-    val `data`: Data = Data()
+    val `data`: Data? = Data()
 )
