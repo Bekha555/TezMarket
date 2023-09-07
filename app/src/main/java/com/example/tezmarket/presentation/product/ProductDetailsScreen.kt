@@ -174,45 +174,51 @@ fun ProductDetailsScreen(
                         .padding(it)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    HorizontalPager(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(420.dp),
-                        count = images.size,
-                        state = pagerState
-                    ) { page ->
-                        val imageUrl = images[page]
-                        AsyncImage(
-                            model = imageUrl,
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null,
-                            onLoading = {},
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable(onClick = {
-                                    selectedImageIndex = page
-                                    visible = false
-                                })
-                        )
-                    }
-                    if (images.size > 1) {
-                        Row(
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        HorizontalPager(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            for (i in 0 until images.size) {
-                                val color =
-                                    if (pagerState.currentPage == i) Primary else LightPurple
-                                Box(
-                                    modifier = Modifier
-                                        .padding(horizontal = 4.dp)
-                                        .size(8.dp)
-                                        .background(color = color, shape = CircleShape)
-                                )
+                                .height(420.dp)
+                                .align(Alignment.Center),
+                            count = images.size,
+                            state = pagerState
+                        ) { page ->
+                            val imageUrl = images[page]
+                            AsyncImage(
+                                model = imageUrl,
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                                onLoading = {},
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable(onClick = {
+                                        selectedImageIndex = page
+                                        visible = false
+                                    })
+                            )
+                        }
+
+                        if (images.size > 1) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 5.dp)
+                                    .align(Alignment.BottomCenter),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                for (i in 0 until images.size) {
+                                    val color =
+                                        if (pagerState.currentPage == i) LightGray else Gray
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(horizontal = 4.dp)
+                                            .size(8.dp)
+                                            .background(color = color, shape = CircleShape)
+                                    )
+                                }
                             }
                         }
+
                     }
                     Column(
                         modifier = Modifier.padding(vertical = 10.dp)

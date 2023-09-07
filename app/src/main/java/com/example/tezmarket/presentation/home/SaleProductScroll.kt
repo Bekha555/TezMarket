@@ -48,8 +48,7 @@ fun <T> SaleProductScroll(
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 10.dp)
                 .background(color = Background)
-        )
-        {
+        ) {
             Text(
                 text = title,
                 fontSize = 34.sp,
@@ -59,17 +58,18 @@ fun <T> SaleProductScroll(
             TextButton(onClick = {
                 when (products.first()) {
                     is Data -> {
+                        // Новое
                         navController.navigate(Screen.ShowAllScreen.passProductName(-1))
                     }
-
+                        // Распродажа
                     is com.example.tezmarket.data.remote.model.discProducts.Data -> {
                         navController.navigate(Screen.ShowAllScreen.passProductName(-2))
                     }
-
+                        //Магазины
                     is com.example.tezmarket.data.remote.model.shops.Data -> {
                         navController.navigate(Screen.ShowAllScreen.passProductName(-3))
                     }
-
+                        //Объявления
                     is com.example.tezmarket.data.remote.model.advertisements.Data -> {
                         navController.navigate(Screen.ShowAllScreen.passProductName(-4))
                     }
@@ -79,17 +79,13 @@ fun <T> SaleProductScroll(
             }
         }
         Text(
-            text = title_mid,
-            fontSize = 11.sp,
-            color = Gray,
-            fontFamily = FontFamily(
+            text = title_mid, fontSize = 11.sp, color = Gray, fontFamily = FontFamily(
                 Font(R.font.metropolis_regular)
             ), modifier = Modifier.padding(bottom = 20.dp, start = 20.dp)
         )
 
         Row(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState()),
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
             // state = rememberLazyListState()
         ) {
 //            val productList = products.subList(0, 6)
@@ -97,9 +93,7 @@ fun <T> SaleProductScroll(
                 Log.d("debug", item.toString())
                 Box(modifier = Modifier.padding(start = 20.dp)) {
                     SaleProduct(
-                        sale_label = sale_label,
-                        width = 150.dp,
-                        onClick = {
+                        sale_label = sale_label, width = 150.dp, onClick = {
 
                             when (item) {
                                 is com.example.tezmarket.data.remote.model.advertisements.Data -> {
@@ -148,8 +142,7 @@ fun <T> SaleProductScroll(
                             }
 
 
-                        },
-                        product = item
+                        }, product = item
                     )
                 }
             }

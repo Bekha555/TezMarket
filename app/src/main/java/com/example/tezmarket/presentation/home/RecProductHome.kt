@@ -94,8 +94,8 @@ fun <T> LazyListScope.gridItems(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             for (columnIndex in 0 until nColumns) {
                 val itemIndex = rowIndex * nColumns + columnIndex

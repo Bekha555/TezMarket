@@ -22,9 +22,7 @@ class MainActivity : ComponentActivity() {
             val systemUiController = rememberSystemUiController()
             systemUiController.setSystemBarsColor(Color.White)
             TezMarketTheme {
-//                TestScreen()
                AppNavigation(navController = navController)
-//                ZoomableAsyncImage()
             }
         }
     }

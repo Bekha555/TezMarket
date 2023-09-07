@@ -227,7 +227,7 @@ fun ShowAllScreen(
                                         filteredProducts[it].let {
                                             SaleProduct(
                                                 sale_label = "",
-                                                width = 160.dp,
+                                                width = 155.dp,
                                                 onClick = {
                                                     navController.navigate(
                                                         Screen.ProductDetailsScreen.passProductDetails(
@@ -252,7 +252,7 @@ fun ShowAllScreen(
                                             products[it].let {
                                                 SaleProduct(
                                                     sale_label = "",
-                                                    width = 160.dp,
+                                                    width = 155.dp,
                                                     onClick = {
                                                         navController.navigate(
                                                             Screen.ProductDetailsScreen.passProductDetails(
@@ -275,7 +275,7 @@ fun ShowAllScreen(
                                             discProducts[it].let {
                                                 SaleProduct(
                                                     sale_label = "",
-                                                    width = 160.dp,
+                                                    width = 155.dp,
                                                     onClick = {
                                                         navController.navigate(
                                                             Screen.ProductDetailsScreen.passProductDetails(
@@ -298,10 +298,10 @@ fun ShowAllScreen(
                                             shopsItems[it].let {
                                                 SaleProduct(
                                                     sale_label = "",
-                                                    width = 160.dp,
+                                                    width = 155.dp,
                                                     onClick = {
                                                         navController.navigate(
-                                                            Screen.ProductDetailsScreen.passProductDetails(
+                                                            Screen.ShopDetailsScreen.passShopDetails(
                                                                 it!!.id ?: 1
                                                             )
                                                         )
@@ -324,7 +324,7 @@ fun ShowAllScreen(
                                                     width = 160.dp,
                                                     onClick = {
                                                         navController.navigate(
-                                                            Screen.ProductDetailsScreen.passProductDetails(
+                                                            Screen.AdvertisementDetailsScreen.passAdvertisementDetails(
                                                                 it!!.id ?: 1
                                                             )
                                                         )
@@ -344,7 +344,7 @@ fun ShowAllScreen(
                                             productsByCategory[it].let {
                                                 SaleProduct(
                                                     sale_label = "",
-                                                    width = 160.dp,
+                                                    width = 155.dp,
                                                     onClick = {
                                                         navController.navigate(
                                                             Screen.ProductDetailsScreen.passProductDetails(

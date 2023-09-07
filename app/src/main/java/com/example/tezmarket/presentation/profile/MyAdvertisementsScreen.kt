@@ -24,6 +24,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -60,13 +61,10 @@ fun MyAdvertisementsScreen(
     LaunchedEffect(key1 = Unit, block = {
         advertisementViewModel.getMyAdvertisements()
     })
-
     var searchText = remember {
         mutableStateOf(TextFieldValue(""))
     }
-
-    val advertisements = advertisementViewModel.myAdvertisementsUiState.data?.data
-
+    val advertisements = advertisementViewModel.advertisements.collectAsState()
 
     Scaffold(
         topBar = {
@@ -76,13 +74,18 @@ fun MyAdvertisementsScreen(
                 shadow = false,
                 icon = "",
                 searchText = searchText,
-                onValueChange = {searchText.value = it},
+                onValueChange = { searchText.value = it },
                 onClick = { /*TODO*/ },
                 lazyListState = LazyListState(),
                 navController = navController
             )
         },
-        bottomBar = { FloatingBottomBar(onClick = { navController.navigate(Screen.ChooseCategory.route) }, text = "Добавить") },
+        bottomBar = {
+            FloatingBottomBar(
+                onClick = { navController.navigate(Screen.ChooseCategory.route) },
+                text = "Добавить"
+            )
+        },
         backgroundColor = Background
     ) {
         Column(
@@ -96,7 +99,7 @@ fun MyAdvertisementsScreen(
                 shadow = false,
                 modifier = Modifier
             )
-            if (advertisementViewModel.myAdvertisementsUiState.data?.data?.isEmpty() == true){
+            if (advertisementViewModel.myAdvertisementsUiState.data?.data?.isEmpty() == true) {
                 Box(modifier = Modifier.height(500.dp)) {
                     Text(
                         text = "Вы пока не создовали объявления",
@@ -113,18 +116,13 @@ fun MyAdvertisementsScreen(
                 }
             }
             Spacer(modifier = Modifier.height(25.dp))
-
-            if (advertisements != null) {
-                for (data in advertisements){
-                    AdvertisementItem({}, data = data)
-                }
+            for (data in advertisements.value) {
+                AdvertisementItem({}, data = data)
             }
-
-
+            Spacer(modifier = Modifier.height(130.dp))
         }
     }
 }
-
 
 @Composable
 fun FloatingBottomBar(onClick: () -> Unit, text: String) {

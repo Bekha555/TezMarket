@@ -14,8 +14,10 @@ import com.example.tezmarket.data.remote.model.advertisementbyid.AdvertisementBy
 import com.example.tezmarket.data.remote.model.banners.BannersData
 import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
+import com.example.tezmarket.data.remote.model.otherAdvertisements.OtherAdvertisementData
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.Data
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
+import com.example.tezmarket.data.remote.model.shopProducts.ShopProductsData
 import com.example.tezmarket.data.remote.model.shopsbyid.ShopByIdData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
 import com.example.tezmarket.data.repositoryimpl.ProductRepositoryImpl
@@ -43,7 +45,11 @@ class HomeViewModel @Inject constructor(
 
     var advertisementByIduiState by mutableStateOf(UiState<AdvertisementById>())
 
+    var otherAdvertisementUiState by mutableStateOf(UiState<OtherAdvertisementData>())
+
     var shopByIdUiState by mutableStateOf(UiState<ShopByIdData>())
+
+    var shopProductUiState by mutableStateOf(UiState<ShopProductsData>())
 
     var simularProductUiState by mutableStateOf(UiState<SimularProduct>())
         private set
@@ -210,10 +216,58 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getOtherAdvertisement(advertisement_id: Int) {
+        viewModelScope.launch {
+            productRepositoryImpl.getOtherAdvertisement(advertisement_id).collect { result ->
+                otherAdvertisementUiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
+    }
+
     fun getShopById(shop_id: Int) {
         viewModelScope.launch {
             productRepositoryImpl.getShopById(shop_id).collect { result ->
                 shopByIdUiState = when (result) {
+                    is Resource.Success -> {
+                        UiState(data = result.content)
+                    }
+
+                    is Resource.Loading -> {
+                        UiState(isLoading = true)
+                    }
+
+                    is Resource.Error -> {
+                        UiState(error = result.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        UiState(unknownError = result.exception.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun getShopProduct(shop_id: Int) {
+        viewModelScope.launch {
+            productRepositoryImpl.getShopProduct(shop_id).collect { result ->
+                shopProductUiState = when (result) {
                     is Resource.Success -> {
                         UiState(data = result.content)
                     }

@@ -125,12 +125,12 @@ fun HomeScreen(
                             gridItems(
                                 recProducts.itemCount,
                                 nColumns = 2,
-                                horizontalArrangement = Arrangement.Center
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 recProducts[it].let {
                                     SaleProduct(
                                         sale_label = "",
-                                        width = 160.dp,
+                                        width = 155.dp,
                                         onClick = {
                                             navController.navigate(
                                                 Screen.ProductDetailsScreen.passProductDetails(

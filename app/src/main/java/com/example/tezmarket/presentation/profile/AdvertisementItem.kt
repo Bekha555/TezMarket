@@ -21,10 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,18 +38,22 @@ import com.example.tezmarket.R
 import com.example.tezmarket.data.remote.model.myadvertisements.Data
 import com.example.tezmarket.ui.theme.Gray
 import com.example.tezmarket.ui.theme.LightGray
-import com.example.tezmarket.ui.theme.Purple200
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @ExperimentalMaterialApi
 @Composable
-fun AdvertisementItem(onClick: () -> Unit, data: Data, advertisementViewModel: AdvertisementViewModel = hiltViewModel()) {
-    var bgColor by remember { mutableStateOf(Purple200) }
+fun AdvertisementItem(
+    onClick: () -> Unit,
+    data: Data,
+    advertisementViewModel: AdvertisementViewModel = hiltViewModel()
+) {
     val squareSize = 65.dp
     val swipeAbleState = rememberSwipeableState(initialValue = 0)
     val sizePx = with(LocalDensity.current) { squareSize.toPx() }
     val anchors = mapOf(0f to 0, -sizePx to 1)
     val advertisements = data
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -71,7 +72,14 @@ fun AdvertisementItem(onClick: () -> Unit, data: Data, advertisementViewModel: A
             .clickable(onClick = onClick)
     ) {
         IconButton(
-            onClick = { advertisements.id?.let { advertisementViewModel.deleteAdvertisement(advertisement_id = it) } }, modifier = Modifier
+            onClick = {
+                advertisements.id?.let {
+                    advertisementViewModel.deleteAdvertisement(
+                        advertisement_id = it
+                    )
+                }
+                coroutineScope.launch { swipeAbleState.animateTo(0) }
+            }, modifier = Modifier
                 .padding(end = 10.dp)
                 .align(
                     Alignment.CenterEnd

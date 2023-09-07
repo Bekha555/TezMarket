@@ -102,7 +102,7 @@ fun AddAdvertisementScreen(
         mutableStateOf(TextFieldValue(""))
     }
     var price by remember {
-        mutableStateOf(TextFieldValue("0"))
+        mutableStateOf(TextFieldValue(""))
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current

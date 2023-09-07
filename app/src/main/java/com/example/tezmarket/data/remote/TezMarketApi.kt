@@ -21,12 +21,14 @@ import com.example.tezmarket.data.remote.model.filterdata.FilterData
 import com.example.tezmarket.data.remote.model.filteredata.FilteredProducts
 import com.example.tezmarket.data.remote.model.modcart.ModCartProduct
 import com.example.tezmarket.data.remote.model.myadvertisements.MyAdvertisementsData
+import com.example.tezmarket.data.remote.model.otherAdvertisements.OtherAdvertisementData
 import com.example.tezmarket.data.remote.model.prodouctsbycategory.ProductByCategory
 import com.example.tezmarket.data.remote.model.productbyid.ProductById
 import com.example.tezmarket.data.remote.model.productrating.AddProductRating
 import com.example.tezmarket.data.remote.model.productrating.ProductRatingData
 import com.example.tezmarket.data.remote.model.products.ProductsData
 import com.example.tezmarket.data.remote.model.recproducts.RecProducts
+import com.example.tezmarket.data.remote.model.shopProducts.ShopProductsData
 import com.example.tezmarket.data.remote.model.shops.ShopsData
 import com.example.tezmarket.data.remote.model.shopsbyid.ShopByIdData
 import com.example.tezmarket.data.remote.model.simularproducts.SimularProduct
@@ -77,10 +79,20 @@ interface TezMarketApi {
         @Path("advertisement_id") advertisement_id: Int
     ): Response<AdvertisementById>
 
+    @GET("advertisements/{advertisement_id}/other-advertisements")
+    suspend fun getOtherAdvertisement(
+        @Path("advertisement_id") advertisement_id: Int
+    ): Response<OtherAdvertisementData>
+
     @GET("shops/{shop_id}")
     suspend fun getShopById(
         @Path("shop_id") shop_id: Int
     ): Response<ShopByIdData>
+
+    @GET("shops/{shop_id}/products")
+    suspend fun getShopProduct(
+        @Path("shop_id") shop_id: Int
+    ): Response<ShopProductsData>
 
     @GET("discounted-products")
     suspend fun getDiscProducts(

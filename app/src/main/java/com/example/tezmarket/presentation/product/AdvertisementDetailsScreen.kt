@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,12 +27,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
@@ -55,11 +51,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -68,14 +62,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tezmarket.R
+import com.example.tezmarket.navigation.Screen
 import com.example.tezmarket.presentation.ProductShimmer
 import com.example.tezmarket.presentation.favorites.FavoritesViewModel
 import com.example.tezmarket.presentation.home.HomeViewModel
 import com.example.tezmarket.ui.common.AppThemeTopBar
+import com.example.tezmarket.ui.common.SaleProduct
 import com.example.tezmarket.ui.theme.Background
 import com.example.tezmarket.ui.theme.Gray
-import com.example.tezmarket.ui.theme.LightPurple
-import com.example.tezmarket.ui.theme.Primary
+import com.example.tezmarket.ui.theme.LightGray
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -93,6 +88,7 @@ fun AdvertisementDetailsScreen(
     LaunchedEffect(key1 = Unit, block = {
         Log.d("debug", advertisementId.toString())
         homeViewModel.getAdvertisementById(advertisement_id = advertisementId)
+        homeViewModel.getOtherAdvertisement(advertisement_id = advertisementId)
     })
 
     var searchText = remember {
@@ -101,6 +97,7 @@ fun AdvertisementDetailsScreen(
 
     val productByIdData = homeViewModel.advertisementByIduiState.data?.data
     // val similarProducts = homeViewModel.simularProductUiState.data?.data ?: emptyList()
+    val otherProducts = homeViewModel.otherAdvertisementUiState.data?.data ?: emptyList()
     val images = productByIdData?.images ?: emptyList()
 
     Log.d("debug", productByIdData.toString())
@@ -131,7 +128,7 @@ fun AdvertisementDetailsScreen(
         }
     }) {
 
-       val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState()
 
         if (homeViewModel.advertisementByIduiState.isLoading || homeViewModel.advertisementByIduiState.error.isNotEmpty()) {
             ProductShimmer()
@@ -159,159 +156,215 @@ fun AdvertisementDetailsScreen(
                         .padding(it)
                         .verticalScroll(rememberScrollState())
                 ) {
-                    HorizontalPager(
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        HorizontalPager(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(420.dp)
+                                .align(Alignment.Center),
+                            count = images.size,
+                            state = pagerState
+                        ) { page ->
+                            val imageUrl = images[page]
+                            AsyncImage(
+                                model = imageUrl,
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                                onLoading = {},
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable(onClick = {
+                                        selectedImageIndex = page
+                                        visible = false
+                                    })
+                            )
+                        }
+
+                        if (images.size > 1) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 5.dp)
+                                    .align(Alignment.BottomCenter),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                for (i in 0 until images.size) {
+                                    val color =
+                                        if (pagerState.currentPage == i) Gray else LightGray
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(horizontal = 4.dp)
+                                            .size(8.dp)
+                                            .background(color = color, shape = CircleShape)
+                                    )
+                                }
+                            }
+                        }
+
+                    }
+
+                    Text(
+                        modifier = Modifier.padding(horizontal = 15.dp),
+                        text = "${productByIdData?.createdAt}",
+                        fontFamily = FontFamily(Font(R.font.metropolis_regular)),
+                        fontSize = 12.sp,
+                        color = Gray
+                    )
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(420.dp),
-                        count = images.size,
-                        state = pagerState
-                    ) { page ->
-                        val imageUrl = images[page]
-                        AsyncImage(
-                            model = imageUrl,
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null,
-                            onLoading = {},
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable(onClick = {
-                                    selectedImageIndex = page
-                                    visible = false
-                                })
+                            .padding(horizontal = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "${productByIdData?.name}",
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            fontSize = 24.sp
+                        )
+                        Text(
+                            text = "${productByIdData?.price} TJS",
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            fontSize = 24.sp
                         )
                     }
-                    if (images.size > 1) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            for (i in 0 until images.size) {
-                                val color =
-                                    if (pagerState.currentPage == i) Primary else LightPurple
-                                Box(
-                                    modifier = Modifier
-                                        .padding(horizontal = 4.dp)
-                                        .size(8.dp)
-                                        .background(color = color, shape = CircleShape)
-                                )
-                            }
-                        }
-                }
 
-                    Column(
-                        modifier = Modifier.padding(vertical = 10.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 10.dp)
-                                .padding(horizontal = 10.dp)
-                        ) {
-                            Text(
-                                modifier = Modifier.align(alignment = Alignment.TopStart),
-                                text = "${productByIdData?.createdAt}",
-                                fontFamily = FontFamily(Font(R.font.metropolis_regular)),
-                                fontSize = 12.sp,
-                                color = Gray
-                            )
-                            IconButton(
-                                onClick = {
-                                    if (selected == 0) {
-                                        selected = 1
-                                    } else {
-                                        selected = 0
-                                    }
-                                    favoritesViewModel.favoritesToggle(
-                                        productId = advertisementId,
-                                        productType = "product"
-                                    )
-                                }, modifier = Modifier
-                                    .size(40.dp)
-                                    .shadow(elevation = 2.dp, clip = true, shape = CircleShape)
-                                    .clip(CircleShape)
-                                    .background(color = Color.White)
-                                    .align(Alignment.CenterEnd)
-                            ) {
-                                Image(
-                                    painter = painterResource(
-                                        id = if (selected == 0 && productByIdData?.isFavorite == false) {
-                                            R.drawable.heart_icon
-                                        } else {
-                                            R.drawable.filled_heart_icon
-                                        }
-                                    ),
-                                    contentDescription = "heart",
-                                    modifier = Modifier
-                                        .size(15.dp)
-                                )
-                            }
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "${productByIdData?.name}",
-                                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
-                                fontSize = 24.sp
-                            )
-                            Text(
-                                text = "${productByIdData?.price} TJS",
-                                fontFamily = FontFamily(Font(R.font.metropolis_bold)),
-                                fontSize = 24.sp
-                            )
-                        }
+                    Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp).padding(bottom = 5.dp)) {
                         Text(
                             text = "${productByIdData?.category?.title}",
                             fontFamily = FontFamily(Font(R.font.metropolis_regular)),
                             fontSize = 12.sp,
                             color = Gray,
-                            modifier = Modifier.padding(horizontal = 10.dp)
+                            modifier = Modifier.align(Alignment.TopStart)
                         )
-
-                        Text(
-                            modifier = Modifier.padding(vertical = 25.dp, horizontal = 10.dp),
-                            text = "${productByIdData?.desc}",
-                            fontFamily = FontFamily(Font(R.font.metropolis_regular))
-                        )
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp)
-                                .horizontalScroll(
-                                    rememberScrollState()
-                                ),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        IconButton(
+                            onClick = {
+                                if (selected == 0) {
+                                    selected = 1
+                                } else {
+                                    selected = 0
+                                }
+                                favoritesViewModel.favoritesToggle(
+                                    productId = advertisementId,
+                                    productType = "product"
+                                )
+                            }, modifier = Modifier.padding(top = 5.dp)
+                                .size(40.dp)
+                                .shadow(elevation = 2.dp, clip = true, shape = CircleShape)
+                                .clip(CircleShape)
+                                .background(color = Color.White)
+                                .align(Alignment.TopEnd)
                         ) {
+                            Image(
+                                painter = painterResource(
+                                    id = if (selected == 0 && productByIdData?.isFavorite == false) {
+                                        R.drawable.heart_icon
+                                    } else {
+                                        R.drawable.filled_heart_icon
+                                    }
+                                ),
+                                contentDescription = "heart",
+                                modifier = Modifier
+                                    .size(15.dp)
+                            )
                         }
+
                     }
+
+
+
+                    Text(
+                        modifier = Modifier.padding(vertical = 0.dp, horizontal = 15.dp),
+                        text = "${productByIdData?.desc}",
+                        fontFamily = FontFamily(Font(R.font.metropolis_regular))
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
+                            .horizontalScroll(
+                                rememberScrollState()
+                            ),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                    }
+
 
                     if (homeViewModel.advertisementByIduiState.data?.data?.attributes?.isNotEmpty() == true) {
                         Text(
                             text = "Характеристики",
                             fontFamily = FontFamily(Font(R.font.metropolis_bold)),
                             fontSize = 24.sp,
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 15.dp)
                         )
                         for (item in homeViewModel.advertisementByIduiState.data?.data?.attributes!!) {
                             Column(
                                 modifier = Modifier
                                     .padding(top = 10.dp)
-                                    .padding(horizontal = 10.dp)
+                                    .padding(horizontal = 15.dp)
                             ) {
                                 Text(text = item.name.toString(), fontSize = 14.sp, color = Gray)
                                 Text(text = item.value.toString())
                             }
                         }
-                        CallSection(name = productByIdData?.client?.name.toString(), number = productByIdData?.client?.phone!!)
+                        Text(
+                            text = "Информация о продавце",
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(start = 15.dp, top = 10.dp)
+                        )
+                        CallSection(
+                            name = productByIdData?.client?.name.toString(),
+                            number = productByIdData?.client?.phone!!
+                        )
+                    }
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 15.dp, vertical = 15.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Вам может понравиться",
+                            fontFamily = FontFamily(Font(R.font.metropolis_bold)),
+                            fontSize = 20.sp
+                        )
+                        Text(
+                            text = "${otherProducts.size} товар(ов)",
+                            fontFamily = FontFamily(Font(R.font.metropolis_regular)),
+                            fontSize = 13.sp,
+                            color = Gray
+                        )
+                    }
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
+                            .horizontalScroll(
+                                rememberScrollState()
+                            ),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        for (product in otherProducts) {
+                            Box(modifier = Modifier.padding(start = 15.dp)) {
+                                SaleProduct(
+                                    sale_label = "new",
+                                    width = 150.dp,
+                                    onClick = {
+                                        navController.navigate(
+                                            Screen.AdvertisementDetailsScreen.passAdvertisementDetails(
+                                                product.id!!
+                                            )
+                                        )
+                                    },
+                                    product = product
+                                )
+                            }
+                        }
                     }
 
                 }
@@ -416,21 +469,11 @@ fun CallSection(name: String, number: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-            .padding(top = 20.dp),
-
-        ) {
-        Image(
-            modifier = Modifier
-                .size(50.dp)
-                .align(Alignment.CenterStart),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.avatar),
-            contentDescription = null
-        )
+            .padding(horizontal = 15.dp)
+            .padding(top = 10.dp)
+    ) {
         Column(
             modifier = Modifier
-                .padding(start = 60.dp)
                 .align(Alignment.CenterStart),
             horizontalAlignment = Alignment.Start
         ) {
@@ -462,9 +505,9 @@ fun CallSection(name: String, number: String) {
         ) {
             Image(
                 contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.call),
+                painter = painterResource(id = R.drawable.call_icon),
                 contentDescription = null,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(40.dp)
             )
         }
 
